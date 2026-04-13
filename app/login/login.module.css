@@ -1,0 +1,215 @@
+/* app/login/login.module.css */
+
+.page {
+  width: 100vw;
+  height: 100vh;
+  background: #0a0a0a;
+  font-family: 'Inter', sans-serif;
+  position: relative;
+  overflow: hidden;
+}
+
+/* Scanline texture overlay */
+.page::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background: repeating-linear-gradient(
+    0deg,
+    transparent,
+    transparent 2px,
+    rgba(255, 255, 255, 0.012) 2px,
+    rgba(255, 255, 255, 0.012) 4px
+  );
+  pointer-events: none;
+  z-index: 10;
+}
+
+/* ── LOGO ── */
+.logoWrap {
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  transition:
+    left 0.65s cubic-bezier(0.77, 0, 0.18, 1),
+    transform 0.65s cubic-bezier(0.77, 0, 0.18, 1);
+  z-index: 2;
+}
+
+.logoWrap.moved {
+  left: 25%;
+  transform: translate(-50%, -50%);
+}
+
+.logoAfter {
+  font-family: 'Ndot57Caps', monospace;
+  font-size: clamp(2rem, 5vw, 3.2rem);
+  letter-spacing: 0.22em;
+  color: #f0ece4;
+  line-height: 1;
+}
+
+.logoHours {
+  font-family: 'Ndot57Caps', monospace;
+  font-size: clamp(2rem, 5vw, 3.2rem);
+  letter-spacing: 0.22em;
+  color: #d42b2b;
+  line-height: 1;
+}
+
+.logoSub {
+  font-family: 'Inter', sans-serif;
+  font-size: 0.65rem;
+  letter-spacing: 0.45em;
+  color: #888;
+  margin-top: 10px;
+  text-transform: uppercase;
+}
+
+/* ── DIVIDER ── */
+.divider {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  width: 1px;
+  height: 180px;
+  background: linear-gradient(to bottom, transparent, #2a2a2a, transparent);
+  opacity: 0;
+  transition: opacity 0.5s ease 0.1s;
+  z-index: 1;
+}
+
+.divider.visible {
+  opacity: 1;
+}
+
+/* ── FORM PANEL ── */
+.formPanel {
+  position: absolute;
+  top: 50%;
+  left: 75%;
+  transform: translate(-50%, -50%);
+  width: 300px;
+  display: flex;
+  flex-direction: column;
+  opacity: 0;
+  transition: opacity 0.5s ease;
+  z-index: 2;
+}
+
+.formPanel.visible {
+  opacity: 1;
+}
+
+.formHeading {
+  font-family: 'Ndot57Caps', monospace;
+  font-size: clamp(1.1rem, 2.5vw, 1.4rem);
+  letter-spacing: 0.08em;
+  color: #f0ece4;
+  margin-bottom: 2rem;
+}
+
+.formHeading span {
+  color: #d42b2b;
+}
+
+.fieldGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 1.1rem;
+  margin-bottom: 1.4rem;
+}
+
+.fieldLabel {
+  font-size: 0.6rem;
+  letter-spacing: 0.3em;
+  color: #888;
+  text-transform: uppercase;
+  margin-bottom: 4px;
+  font-family: 'Inter', sans-serif;
+}
+
+.fieldInput {
+  width: 100%;
+  background: transparent;
+  border: none;
+  border-bottom: 1px solid #333;
+  color: #f0ece4;
+  font-family: 'NType82Mono', monospace;
+  font-size: 0.8rem;
+  letter-spacing: 0.08em;
+  padding: 6px 0;
+  outline: none;
+  transition: border-color 0.2s;
+}
+
+.fieldInput::placeholder {
+  color: #444;
+}
+
+.fieldInput:focus {
+  border-bottom-color: #d42b2b;
+}
+
+.btnProceed {
+  width: 100%;
+  background: #d42b2b;
+  color: #fff;
+  border: none;
+  font-family: 'Ndot57Caps', monospace;
+  font-size: 0.75rem;
+  letter-spacing: 0.35em;
+  text-transform: uppercase;
+  padding: 11px 0;
+  cursor: pointer;
+  transition: background 0.2s;
+  margin-bottom: 1rem;
+}
+
+.btnProceed:hover {
+  background: #b02020;
+}
+
+.formFooter {
+  font-size: 0.6rem;
+  color: #555;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  font-family: 'Inter', sans-serif;
+}
+
+.formFooter a {
+  color: #d42b2b;
+  text-decoration: none;
+  margin-left: 4px;
+}
+
+.formFooter a:hover {
+  text-decoration: underline;
+}
+
+/* ── RESPONSIVE ── */
+@media (max-width: 640px) {
+  .logoWrap.moved {
+    top: 28%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+  }
+
+  .formPanel {
+    top: 65%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 80vw;
+  }
+
+  .divider {
+    display: none;
+  }
+}

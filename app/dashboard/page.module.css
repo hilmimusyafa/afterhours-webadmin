@@ -1,0 +1,150 @@
+.page {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+/* ── Top row ── */
+.topRow {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+
+/* ── Card ── */
+.card {
+  background: #0f0f0f;
+  border: 1px solid #1a1a1a;
+  padding: 20px;
+}
+
+.cardTitle {
+  font-family: 'Ndot57Caps', monospace;
+  font-size: 0.75rem;
+  letter-spacing: 0.15em;
+  color: #f0ece4;
+  margin-bottom: 16px;
+}
+
+.cardTitle span {
+  color: #d42b2b;
+}
+
+/* ── Stats grid (2x2) ── */
+.statsGrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1px;
+  background: #1a1a1a;
+  border: 1px solid #1a1a1a;
+}
+
+.statItem {
+  background: #0f0f0f;
+  padding: 20px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.statLabel {
+  font-family: 'Inter', sans-serif;
+  font-size: 0.6rem;
+  letter-spacing: 0.2em;
+  color: #444;
+  text-transform: uppercase;
+}
+
+.statValue {
+  font-family: 'Ndot57Caps', monospace;
+  font-size: 1.4rem;
+  color: #f0ece4;
+}
+
+/* ── Order list ── */
+.orderList {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.orderRow {
+  display: grid;
+  grid-template-columns: 80px 1fr 50px auto;
+  gap: 8px;
+  align-items: center;
+  padding: 4px 0;
+  border-bottom: 1px solid #141414;
+}
+
+.orderRow:last-child {
+  border-bottom: none;
+}
+
+.orderId {
+  font-family: 'NType82Mono', monospace;
+  font-size: 0.65rem;
+  color: #d42b2b;
+  letter-spacing: 0.05em;
+}
+
+.orderCustomer {
+  font-family: 'NType82Mono', monospace;
+  font-size: 0.65rem;
+  color: #888;
+}
+
+.orderDate {
+  font-family: 'NType82Mono', monospace;
+  font-size: 0.65rem;
+  color: #555;
+  text-align: center;
+}
+
+.orderAmount {
+  font-family: 'NType82Mono', monospace;
+  font-size: 0.65rem;
+  color: #f0ece4;
+  text-align: right;
+  white-space: nowrap;
+}
+
+/* ── API grid ── */
+.apiGrid {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.apiRow {
+  display: grid;
+  grid-template-columns: 1fr 80px 80px;
+  align-items: center;
+  padding: 6px 0;
+  border-bottom: 1px solid #141414;
+}
+
+.apiRow:last-child {
+  border-bottom: none;
+}
+
+.apiName {
+  font-family: 'NType82Mono', monospace;
+  font-size: 0.65rem;
+  color: #888;
+  letter-spacing: 0.05em;
+}
+
+.apiStatus {
+  font-family: 'NType82Mono', monospace;
+  font-size: 0.65rem;
+  color: #d42b2b;
+  letter-spacing: 0.08em;
+}
+
+.apiUptime {
+  font-family: 'NType82Mono', monospace;
+  font-size: 0.65rem;
+  color: #555;
+  text-align: right;
+}

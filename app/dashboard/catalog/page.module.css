@@ -1,0 +1,99 @@
+/* app/dashboard/catalog/page.module.css */
+
+.page {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 24px;
+  padding-top: 12px;
+}
+
+.pageTitle {
+  font-family: 'Ndot57Caps', monospace;
+  font-size: 1.4rem;
+  font-weight: 400;
+  letter-spacing: 0.1em;
+  color: #f0ece4;
+}
+
+.pageTitle span {
+  color: #d42b2b;
+}
+
+/* ── Search ── */
+.searchWrap {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  max-width: 480px;
+  background: #111;
+  border: 1px solid #222;
+  padding: 8px 14px;
+  gap: 8px;
+}
+
+.searchTilde {
+  font-family: 'NType82Mono', monospace;
+  font-size: 0.8rem;
+  color: #444;
+}
+
+.searchInput {
+  flex: 1;
+  background: transparent;
+  border: none;
+  outline: none;
+  color: #f0ece4;
+  font-family: 'NType82Mono', monospace;
+  font-size: 0.75rem;
+  letter-spacing: 0.05em;
+}
+
+.searchInput::placeholder {
+  color: #333;
+}
+
+.searchBtn {
+  background: transparent;
+  border: none;
+  color: #d42b2b;
+  font-size: 1rem;
+  cursor: pointer;
+  line-height: 1;
+}
+
+/* ── Grid ── */
+.grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 16px;
+  width: 100%;
+}
+
+.productCard {
+  background: #111;
+  border: 1px solid #1a1a1a;
+  overflow: hidden;
+  cursor: pointer;
+  transition: border-color 0.2s;
+}
+
+.productCard:hover {
+  border-color: #333;
+}
+
+.productImg {
+  width: 100%;
+  aspect-ratio: 1;
+  background: #1e1612;
+  /* Ganti dengan <img> tag kalau ada gambar asli */
+}
+
+.productName {
+  padding: 10px 12px;
+  font-family: 'NType82Mono', monospace;
+  font-size: 0.65rem;
+  letter-spacing: 0.08em;
+  color: #888;
+  border-top: 1px solid #1a1a1a;
+}

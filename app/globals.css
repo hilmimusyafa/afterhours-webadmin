@@ -1,232 +1,113 @@
 @import "tailwindcss";
 
-* {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
+@font-face {
+  font-family: "Ndot";
+  src: url("/fonts/Ndot55-Regular.otf") format("opentype");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
 }
- 
-:root {
-  --red: #d42b2b;
-  --white: #f0ece4;
-  --dim: #888;
-  --bg: #0a0a0a;
+
+@font-face {
+  font-family: "Ndot57";
+  src: url("/fonts/Ndot57-Regular.otf") format("opentype");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
 }
- 
-body {
-  background: var(--bg);
-  overflow: hidden;
+
+@font-face {
+  font-family: "Ndot57Caps";
+  src: url("/fonts/Ndot57Caps-Regular.otf") format("opentype");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
 }
- 
-/* Scanline texture overlay */
-body::before {
-  content: '';
-  position: fixed;
-  inset: 0;
-  background: repeating-linear-gradient(
-    0deg,
-    transparent,
-    transparent 2px,
-    rgba(255, 255, 255, 0.012) 2px,
-    rgba(255, 255, 255, 0.012) 4px
-  );
-  pointer-events: none;
-  z-index: 10;
+
+@font-face {
+  font-family: "Ndot55Caps";
+  src: url("/fonts/Ndot55Caps-Regular.otf") format("opentype");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
 }
- 
-/* ── PAGE ── */
-.page {
-  width: 100vw;
-  height: 100vh;
-  background: var(--bg);
-  font-family: 'Inter', sans-serif;
-  position: relative;
-  overflow: hidden;
+
+@font-face {
+  font-family: "Ndot77";
+  src: url("/fonts/Ndot77JPExtended.ttf") format("truetype");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
 }
- 
-/* ── LOGO ── */
-.logo-wrap {
-  position: absolute;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 2px;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  transition:
-    left 0.65s cubic-bezier(0.77, 0, 0.18, 1),
-    transform 0.65s cubic-bezier(0.77, 0, 0.18, 1);
-  z-index: 2;
+
+@font-face {
+  font-family: "NType82";
+  src: url("/fonts/NType82-Regular.otf") format("opentype");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
 }
- 
-.logo-wrap.moved {
-  left: 25%;
-  transform: translate(-50%, -50%);
+
+@font-face {
+  font-family: "NType82Headline";
+  src: url("/fonts/NType82-Headline.otf") format("opentype");
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
 }
- 
-.logo-after {
-  font-family: 'Share Tech Mono', monospace;
-  font-size: clamp(2rem, 5vw, 3.2rem);
-  letter-spacing: 0.22em;
-  color: var(--white);
-  line-height: 1;
+
+@font-face {
+  font-family: "NType82Mono";
+  src: url("/fonts/NType82Mono-Regular.otf") format("opentype");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
 }
- 
-.logo-hours {
-  font-family: 'Share Tech Mono', monospace;
-  font-size: clamp(2rem, 5vw, 3.2rem);
-  letter-spacing: 0.22em;
-  color: var(--red);
-  line-height: 1;
+
+@font-face {
+  font-family: "LetteraMono";
+  src: url("/fonts/LetteraMonoLL-Regular.otf") format("opentype");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
 }
- 
-.logo-sub {
-  font-family: 'Inter', sans-serif;
-  font-size: 0.65rem;
-  letter-spacing: 0.45em;
-  color: var(--dim);
-  margin-top: 10px;
-  text-transform: uppercase;
+
+@font-face {
+  font-family: "LetteraMono";
+  src: url("/fonts/LetteraMonoLL-Medium.otf") format("opentype");
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
 }
- 
-/* ── DIVIDER ── */
-.divider {
-  position: absolute;
-  left: 50%;
-  top: 50%;
-  transform: translate(-50%, -50%);
-  width: 1px;
-  height: 180px;
-  background: linear-gradient(to bottom, transparent, #2a2a2a, transparent);
-  opacity: 0;
-  transition: opacity 0.5s ease 0.1s;
-  z-index: 1;
+
+@font-face {
+  font-family: "Inter";
+  src: url("/fonts/Inter-Regular.ttf") format("truetype");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
 }
- 
-.divider.visible {
-  opacity: 1;
+
+@font-face {
+  font-family: "Inter";
+  src: url("/fonts/Inter-Medium.otf") format("opentype");
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
 }
- 
-/* ── FORM PANEL ── */
-.form-panel {
-  position: absolute;
-  top: 50%;
-  left: 75%;
-  transform: translate(-50%, -50%);
-  width: 300px;
-  display: flex;
-  flex-direction: column;
-  opacity: 0;
-  transition: opacity 0.5s ease;
-  z-index: 2;
+
+@font-face {
+  font-family: "SpaceGrotesk";
+  src: url("/fonts/SpaceGrotesk-Regular.otf") format("opentype");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
 }
- 
-.form-panel.visible {
-  opacity: 1;
-}
- 
-.form-heading {
-  font-family: 'Share Tech Mono', monospace;
-  font-size: clamp(1.1rem, 2.5vw, 1.4rem);
-  letter-spacing: 0.08em;
-  color: var(--white);
-  margin-bottom: 2rem;
-}
- 
-.form-heading span {
-  color: var(--red);
-}
- 
-.field-group {
-  display: flex;
-  flex-direction: column;
-  gap: 1.1rem;
-  margin-bottom: 1.4rem;
-}
- 
-.field-label {
-  font-size: 0.6rem;
-  letter-spacing: 0.3em;
-  color: var(--dim);
-  text-transform: uppercase;
-  margin-bottom: 4px;
-}
- 
-.field-input {
-  width: 100%;
-  background: transparent;
-  border: none;
-  border-bottom: 1px solid #333;
-  color: var(--white);
-  font-family: 'Share Tech Mono', monospace;
-  font-size: 0.8rem;
-  letter-spacing: 0.08em;
-  padding: 6px 0;
-  outline: none;
-  transition: border-color 0.2s;
-}
- 
-.field-input::placeholder {
-  color: #444;
-}
- 
-.field-input:focus {
-  border-bottom-color: var(--red);
-}
- 
-.btn-proceed {
-  width: 100%;
-  background: var(--red);
-  color: #fff;
-  border: none;
-  font-family: 'Share Tech Mono', monospace;
-  font-size: 0.75rem;
-  letter-spacing: 0.35em;
-  text-transform: uppercase;
-  padding: 11px 0;
-  cursor: pointer;
-  transition: background 0.2s;
-  margin-bottom: 1rem;
-}
- 
-.btn-proceed:hover {
-  background: #b02020;
-}
- 
-.form-footer {
-  font-size: 0.6rem;
-  color: #555;
-  letter-spacing: 0.15em;
-  text-transform: uppercase;
-}
- 
-.form-footer a {
-  color: var(--red);
-  text-decoration: none;
-  margin-left: 4px;
-}
- 
-.form-footer a:hover {
-  text-decoration: underline;
-}
- 
-/* ── RESPONSIVE ── */
-@media (max-width: 640px) {
-  .logo-wrap.moved {
-    top: 28%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-  }
- 
-  .form-panel {
-    top: 65%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    width: 80vw;
-  }
- 
-  .divider {
-    display: none;
-  }
+
+@font-face {
+  font-family: "SpaceMono";
+  src: url("/fonts/SpaceMono-Regular.otf") format("opentype");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
 }

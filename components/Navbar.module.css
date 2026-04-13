@@ -1,0 +1,97 @@
+.navbar {
+  width: 100%;
+  height: 104px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 28px;
+  background: #0a0a0a;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+/* ── Brand ── */
+.brand {
+  display: flex;
+  align-items: baseline;
+  gap: 0;
+  text-decoration: none;
+}
+
+.brandAfter {
+  font-family: 'Ndot57Caps', monospace;
+  font-size: 2.1rem;
+  color: #f0ece4;
+  letter-spacing: 0.05em;
+}
+
+.brandHours {
+  font-family: 'Ndot57Caps', monospace;
+  font-size: 2.1rem;
+  color: #d42b2b;
+  letter-spacing: 0.05em;
+}
+
+.brandAdmin {
+  font-family: 'Inter', sans-serif;
+  font-size: 0.55rem;
+  color: #f0ece4;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  margin-left: 10px;
+  align-self: center;
+}
+
+/* ── Right side ── */
+.right {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+/* ── Nav links ── */
+.nav {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  background: #111;
+  border: 1px solid #1e1e1e;
+  border-radius: 999px;
+  padding: 6px 6px;
+}
+
+.navLink {
+  font-family: 'Ndot57Caps', monospace;
+  font-size: 1.6rem;
+  letter-spacing: 0.12em;
+  color: #f0ece4;
+  text-decoration: none;
+  padding: 5px 12px;
+  border-radius: 999px;
+  transition: color 0.2s, background 0.2s;
+}
+
+.navLink:hover {
+  color: #aaa;
+}
+
+.navLink.active {
+  color: #d42b2b;
+}
+
+/* ── Avatar ── */
+.avatar {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: #d42b2b;
+  color: #fff;
+  font-family: 'Inter', sans-serif;
+  font-size: 0.75rem;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
