@@ -111,3 +111,32 @@
   font-style: normal;
   font-display: swap;
 }
+
+@font-face {
+  font-family: "JetBrains Mono";
+  src: url("/fonts/JetBrainsMono-Regular.ttf") format("truetype");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+:root {
+  --background: #000000;
+  --box: #1C1C1C;
+  --foreground: #ffffff;
+  --accent: #EC232B;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --background: #000000;
+    --box: #1C1C1C;
+    --foreground: #ffffff;
+    --accent: #EC232B;
+  }
+}
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: "Ndot55", "Ndot57", "Ndot57Caps", "Ndot55Caps", "Ndot77", "NType82", "NType82Headline", "NType82Mono", "LetteraMono", "Inter", "SpaceGrotesk", "SpaceMono", "JetBrains Mono", sans-serif;
+}

@@ -2,9 +2,8 @@
 
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
-import styles from "./login.module.css";
 
-export default function Home() {
+export default function Login() {
   const router = useRouter();
   const [moved, setMoved] = useState(false);
   const [formVisible, setFormVisible] = useState(false);
@@ -22,42 +21,82 @@ export default function Home() {
 
   const handleProceed = (e: React.MouseEvent) => {
     e.preventDefault();
-    router.push("/dashboard");
+    router.push("/");
   };
 
   return (
-    <div className={styles.page}>
-      {/* Logo — slides from center to left */}
-      <div className={`${styles.logoWrap} ${moved ? styles.moved : ""}`}>
-        <div className={styles.logoAfter}>AFTER</div>
-        <div className={styles.logoHours}>HOURS</div>
-        <div className={styles.logoSub}>Admin</div>
+    <div className=" overflow-hidden">
+      <div
+        className="fixed inset-0 pointer-events-none z-10"
+        style={{
+          background:
+            "repeating-linear-gradient(0deg, transparent, transparent 2px)",
+        }}
+      />
+
+      <div
+        className={
+          "absolute flex flex-col items-center gap-0.5 transform -translate-x-1/2 -translate-y-1/2 transition-all duration-700 ease-[cubic-bezier(0.77,0,0.18,1)] z-20 " +
+          (moved
+            ? "left-[25%] top-[50%] max-sm:left-[50%] max-sm:top-[30%]"
+            : "left-[50%] top-[50%]")
+        }
+      >
+        <div className="font-[Ndot57Caps] text-[clamp(2.5rem,5vw,3.5rem)] tracking-[0.22em] text-[#f0ece4] leading-none">
+          AFTER
+        </div>
+        <div className="font-[Ndot57Caps] text-[clamp(2.5rem,5vw,3.5rem)] tracking-[0.22em] text-[#d42b2b] leading-none">
+          HOURS
+        </div>
+        <div className="font-mono text-sm tracking-[0.45em] text-white mt-4 uppercase">
+          Admin
+        </div>
       </div>
 
-      {/* Divider */}
-      <div className={`${styles.divider} ${formVisible ? styles.visible : ""}`} />
+      {/* Garis Pembatas (Hanya muncul di Desktop) */}
+      <div
+        className={
+          "absolute left-[50%] top-[50%] transform -translate-x-1/2 -translate-y-1/2 w-px h-[250px] bg-gradient-to-b from-transparent via-[#333] to-transparent transition-opacity duration-500 delay-100 z-10 " +
+          (formVisible ? "opacity-100" : "opacity-0") +
+          " max-sm:hidden"
+        }
+      />
 
-      {/* Login form */}
-      <div className={`${styles.formPanel} ${formVisible ? styles.visible : ""}`}>
-        <div className={styles.formHeading}>
-          <span>*ADMIN </span>LOGIN
+      {/* Login form — Desktop: Muncul di Kanan (75%), Mobile: Muncul di Bawah (65%) */}
+      <div
+        className={
+          "absolute transform -translate-x-1/2 -translate-y-1/2 flex flex-col transition-opacity duration-500 z-20 w-[300px] max-sm:w-[85vw] " +
+          (formVisible ? "opacity-100" : "opacity-0") +
+          " " +
+          (moved
+            ? "left-[75%] top-[50%] max-sm:left-[50%] max-sm:top-[65%]"
+            : "left-[50%] top-[50%]")
+        }
+      >
+        <div className="font-[Ndot57Caps] text-[clamp(1.2rem,2.5vw,1.5rem)] tracking-[0.08em] text-[#f0ece4] mb-10 max-sm:text-center">
+          <span className="text-[#d42b2b]">*ADMIN </span>LOGIN
         </div>
 
-        <div className={styles.fieldGroup}>
+        <div className="flex flex-col gap-6 mb-12">
           <div>
-            <div className={styles.fieldLabel}>Email</div>
+            <div className="text-[0.65rem] tracking-[0.3em] text-white uppercase mb-2 font-mono">
+              Email
+            </div>
             <input
-              className={styles.fieldInput}
+              className="w-full bg-transparent border-b border-[#333] text-[#f0ece4] font-mono text-sm py-2 outline-none placeholder:text-[#444] focus:border-b-[#d42b2b] transition-colors"
               type="email"
               placeholder="your email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
             />
           </div>
+
           <div>
-            <div className={styles.fieldLabel}>Password</div>
+            <div className="text-[0.65rem] tracking-[0.3em] text-white uppercase mb-2 font-mono">
+              Password
+            </div>
             <input
-              className={styles.fieldInput}
+              className="w-full bg-transparent border-b border-[#333] text-[#f0ece4] font-mono text-sm py-2 outline-none placeholder:text-[#444] focus:border-b-[#d42b2b] transition-colors"
               type="password"
               placeholder="••••••••"
               value={password}
@@ -67,10 +106,12 @@ export default function Home() {
           </div>
         </div>
 
-        <button className={styles.btnProceed} onClick={handleProceed}>
+        <button
+          className="w-full bg-[#d42b2b] text-white font-mono text-[0.8rem] tracking-[0.35em] uppercase py-3.5 cursor-pointer hover:bg-[#b02020] transition-colors"
+          onClick={handleProceed}
+        >
           Proceed
         </button>
-
       </div>
     </div>
   );
