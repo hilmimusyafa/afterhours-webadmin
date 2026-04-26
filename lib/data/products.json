@@ -1,0 +1,6 @@
+[
+  { "id": "1", "name": "NEO STUDIO 60HE+", "image_url": "/Neo.jpg", "price": 120, "stock": 12, "category": "peripherals", "description": "High performance magnetic switch keyboard.", "tags": ["Hall Effect", "60%", "Hot-swap"] },
+  { "id": "2", "name": "Abdul Gaming Chair", "image_url": "/Abdul.jpg", "price": 220, "stock": 4, "category": "furniture", "description": "Comfortable gaming chair for long sessions.", "tags": ["Lumbar Support", "4D Armrest"] },
+  { "id": "3", "name": "Audio Headset", "image_url": "/Audio.jpg", "price": 80, "stock": 7, "category": "audio", "description": "Surround sound headset with mic.", "tags": ["7.1 Surround", "Noise Cancel"] },
+  { "id": "4", "name": "Desk Accessories", "image_url": "/Desk.jpg", "price": 45, "stock": 15, "category": "desk_accessories", "description": "Minimal desk setup accessories.", "tags": ["Minimal", "Bundle"] }
+]
