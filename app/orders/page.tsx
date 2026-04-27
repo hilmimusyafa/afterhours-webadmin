@@ -1,101 +1,66 @@
+// app/orders/page.tsx
 "use client";
 
-import Link from "next/link";
 import { useState } from "react";
-import { getOrders } from "../../lib/services/order.service";
 
-const STATUS_STYLES: Record<string, string> = {
-  pending: "text-amber-400 border-amber-900 bg-amber-950",
-  shipped: "text-blue-400 border-blue-900 bg-blue-950",
-  delivered: "text-emerald-400 border-emerald-900 bg-emerald-950",
-  cancelled: "text-[#d42b2b] border-[#3a0d0d] bg-[#1a0505]",
-};
+const ORDERS = [
+  { id: "27/03/2142", name: "~ NEO STUDIO 60HE+", customer: "abdul.1ahmiques", status: "COMPLETED" },
+  { id: "17/03/2142", name: "~ NEO STUDIO 60HE+", customer: "abdul.1ahmiques", status: "COMPLETED" },
+];
 
 export default function OrdersPage() {
   const [search, setSearch] = useState("");
-  const orders = getOrders();
 
-  const filtered = orders.filter(
+  const filtered = ORDERS.filter(
     (o) =>
-      o.id.toLowerCase().includes(search.toLowerCase()) ||
-      o.user.toLowerCase().includes(search.toLowerCase()) ||
-      o.status.toLowerCase().includes(search.toLowerCase())
+      o.name.toLowerCase().includes(search.toLowerCase()) ||
+      o.customer.toLowerCase().includes(search.toLowerCase())
   );
 
   return (
     <div className="flex flex-col gap-8 w-full">
+      <h1 className="font-['Ndot57Caps'] text-[2rem] tracking-[0.1em] text-center text-[#f0ece4] uppercase">
+        ORDER <span className="text-[#d42b2b]">MANAGER</span>
+      </h1>
 
-      {/* Header */}
-      <div className="flex items-center justify-between">
-        <h1 className="font-['Ndot57Caps'] text-[2rem] tracking-[0.1em] text-[#f0ece4] uppercase">
-          ORDER <span className="text-[#d42b2b]">MANAGER</span>
-        </h1>
-        <span className="font-mono text-[11px] text-[#444] tracking-widest uppercase">
-          {filtered.length} orders
-        </span>
-      </div>
-
-      {/* Search */}
-      <div className="flex items-center w-full bg-[#0f0f0f] border border-[#1a1a1a] px-4 py-3 gap-3">
-        <span className="font-mono text-base text-[#d42b2b]">~</span>
+      <div className="flex items-center w-full max-w-md bg-[#0f0f0f] border border-[#1a1a1a] px-4 py-3 gap-3 rounded-sm mx-auto">
+        <span className="font-mono text-[0.8rem] text-[#d42b2b]">~</span>
         <input
-          className="flex-1 bg-transparent outline-none text-[#f0ece4] font-mono text-sm placeholder:text-[#333]"
+          className="flex-1 bg-transparent outline-none text-[#f0ece4] font-mono text-sm tracking-[0.05em] placeholder:text-[#444]"
           type="text"
-          placeholder="Search by order id, customer, status..."
+          placeholder="Search orders..."
           value={search}
           onChange={(e) => setSearch(e.target.value)}
         />
+        <button className="bg-transparent text-[#d42b2b] text-lg leading-none hover:text-[#f0ece4] transition-colors">
+          ⊕
+        </button>
       </div>
 
-      {/* Table Header */}
-      <div className="grid grid-cols-[1fr_2fr_2fr_1fr_1fr] gap-4 px-4 font-mono text-[10px] tracking-widest uppercase text-[#444]">
-        <span>Order ID</span>
-        <span>Customer</span>
-        <span>Shipping Address</span>
-        <span>Total</span>
-        <span>Status</span>
-      </div>
-
-      {/* Rows */}
-      <div className="flex flex-col gap-2 w-full">
+      <div className="flex flex-col gap-3 w-full py-6 max-w-none">
         {filtered.map((order) => (
-          <Link
+          <div
             key={order.id}
-            href={`/orders/${order.id}`}
-            className="grid grid-cols-[1fr_2fr_2fr_1fr_1fr] gap-4 items-center bg-[#0f0f0f] border border-[#1a1a1a] px-4 py-4 hover:border-[#333] transition-all cursor-pointer"
+            className="flex items-center gap-4 bg-[#0f0f0f] border border-[#1a1a1a] p-4 cursor-pointer transition-colors duration-200 hover:border-[#333] w-full"
           >
-            <span className="font-mono text-[11px] text-[#555] tracking-widest uppercase">
-              {order.id}
-            </span>
-
-            <div className="flex items-center gap-2">
-              <span className="w-1.5 h-1.5 rounded-full bg-[#d42b2b] flex-shrink-0" />
-              <span className="font-mono text-sm text-[#f0ece4]">
-                {order.user}
-              </span>
+            <div className="w-[100px] h-[80px] bg-[#1e1612] flex-shrink-0" />
+            <div className="flex-1 flex flex-col gap-1">
+              <div className="font-mono text-[0.85rem] tracking-[0.05em] text-[#444]">
+                {order.id}
+              </div>
+              <div className="text-[1rem] font-normal tracking-[0.05em] text-[#f0ece4]">
+                {order.name}
+              </div>
+              <div className="flex items-center gap-1.5 font-mono text-[0.75rem] text-[#666]">
+                <span className="w-2 h-2 rounded-full bg-[#d42b2b] flex-shrink-0" />
+                {order.customer}
+              </div>
             </div>
-
-            <span className="font-mono text-[11px] text-[#555] truncate">
-              {order.shipping_address}
-            </span>
-
-            <span className="font-mono text-sm text-[#d42b2b]">
-              ${order.total_amount.toFixed(2)}
-            </span>
-
-            <span
-              className={`font-mono text-[10px] tracking-widest uppercase border px-2 py-1 w-fit ${STATUS_STYLES[order.status]}`}
-            >
+            <div className="font-mono text-[0.8rem] tracking-[0.15em] text-[#f0ece4] text-right">
               {order.status}
-            </span>
-          </Link>
-        ))}
-
-        {filtered.length === 0 && (
-          <div className="text-center font-mono text-[12px] text-[#333] tracking-widest py-20 uppercase">
-            No orders found
+            </div>
           </div>
-        )}
+        ))}
       </div>
     </div>
   );

@@ -1,117 +1,76 @@
-import Link from "next/link";
-import Image from "next/image";
-import { notFound } from "next/navigation";
-import { getProductById } from "../../../lib/services/product.service";
+"use client"
 
-export default async function ProductDetail({
-  params,
-}: {
-  params: Promise<{ id: string }>;
-}) {
-  const { id } = await params;
-  const product = getProductById(id);
-  if (!product) notFound();
 
-  const isLowStock = product.stock <= 5;
+export default function CatalogItemPage() {
+    return (
+        <div className="flex flex-col gap-8 w-full relative">
+            {/* Header */}
+            <div className="flex flex-col gap-2 w-full text-left">
+                <h1 className="font-['Ndot57Caps'] text-[2rem] tracking-[0.1em] text-center text-[#f0ece4] uppercase">
+                    CATALOG <span className="text-[#d42b2b]">ITEM</span>
+                </h1>
+                <div className="w-fit mx-auto px-3 py-1 bg-[#0f0f0f] border border-[#1a1a1a] text-[#d42b2b] text-[0.65rem] tracking-[0.2em] uppercase font-mono rounded-sm text-center">
+                    Details
+                </div>
+            </div>
 
-  return (
-    <div className="text-[#f0ece4] flex flex-col gap-10 w-full">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 w-full items-stretch">
+                {/* Kontainer Foto */}
+                <div className="relative overflow-hidden rounded-sm border border-[#1a1a1a] bg-[#0f0f0f] w-full h-full min-h-[300px]">
+                    <img
+                        src="/images/catalog-item.jpg"
+                        alt="Catalog item"
+                        className="absolute inset-0 w-full h-full object-cover block opacity-90"
+                    />
+                    <div
+                        className="absolute inset-0 pointer-events-none opacity-20"
+                        style={{ backgroundImage: 'radial-gradient(#d42b2b 0.5px, transparent 0.5px)', backgroundSize: '15px 15px' }}
+                    />
+                    <div className="absolute bottom-6 left-6 flex flex-col gap-1 bg-[#0f0f0f]/90 p-3 border border-[#1a1a1a] backdrop-blur-md rounded-sm">
+                        <p className="text-[0.65rem] tracking-[0.2em] uppercase text-[#888] font-mono">Preview</p>
+                        <p className="text-sm text-[#f0ece4] font-mono">NEO STUDIO 60HE+</p>
+                    </div>
+                </div>
 
-      {/* Back */}
-      <Link
-        href="/catalog"
-        className="w-fit flex items-center gap-2 px-4 py-2 border border-[#1e1e1e] font-mono text-[11px] tracking-widest text-[#555] uppercase hover:text-[#d42b2b] hover:border-[#3a0d0d] transition-all"
-      >
-        ← catalog
-      </Link>
+                {/* Kotak Teks */}
+                <div className="flex flex-col gap-6 p-8 rounded-sm border border-[#1a1a1a] bg-[#0f0f0f] text-[#f0ece4] min-h-[500px] md:min-h-[600px] justify-start h-full">
+                    {/* Judul & Badge Kategori */}
+                    <div className="flex flex-col gap-4">
+                        <h2 className="text-3xl font-semibold tracking-wide">NEO STUDIO 60HE+</h2>
+                        <div>
+                            <span className="px-3 py-1.5 bg-[#1a1a1a] border border-[#333] text-[#a0a0a0] text-[0.65rem] tracking-[0.2em] uppercase font-mono rounded-sm">
+                                Category: Keyboard
+                            </span>
+                        </div>
+                    </div>
 
-      <div className="grid md:grid-cols-2 gap-16 items-start">
+                    {/* Deskripsi */}
+                    <p className="text-sm md:text-md text-[#cfcfcf] font-mono leading-relaxed mt-2">
+                        The NEO STUDIO 60HE+ is a high-performance desktop computer designed for professionals and gamers alike. With its powerful hardware and sleek design, it delivers exceptional performance for demanding tasks and immersive gaming experiences.
+                    </p>
 
-        {/* Image */}
-        <div className="relative w-full aspect-square bg-[#111] border border-[#1e1e1e] overflow-hidden">
-          <Image
-            src={product.image_url}
-            alt={product.name}
-            fill
-            className="object-cover"
-          />
+                    {/* Area Bawah: Harga, Stok, dan Tombol */}
+                    <div className="mt-auto pt-6 border-t border-[#1a1a1a] flex flex-col sm:flex-row justify-between items-start sm:items-end gap-6">
+                        {/* Grup Harga & Stok */}
+                        <div className="flex gap-10">
+                            <div className="flex flex-col gap-1">
+                                <p className="text-[0.65rem] tracking-[0.2em] uppercase text-[#888] font-mono">Price</p>
+                                <p className="text-2xl font-semibold text-[#f0ece4]">Rp 15.000.000</p>
+                            </div>
+
+                            <div className="flex flex-col gap-1">
+                                <p className="text-[0.65rem] tracking-[0.2em] uppercase text-[#888] font-mono">Stock</p>
+                                <p className="text-2xl font-semibold text-[#f0ece4]">10</p>
+                            </div>
+                        </div>
+
+                        {/* Tombol Aksi */}
+                        <button className="w-full sm:w-auto px-8 py-3 bg-[#d42b2b] text-white font-mono text-sm tracking-[0.1em] uppercase rounded-sm hover:bg-[#b02020] transition-colors">
+                            Edit Item
+                        </button>
+                    </div>
+                </div>
+            </div>
         </div>
-
-        {/* Detail */}
-        <div className="flex flex-col gap-8">
-
-          {/* Badge + Name */}
-          <div className="flex flex-col gap-3">
-            <span className="inline-block font-mono text-[10px] tracking-[.12em] uppercase text-[#d42b2b] bg-[#1a0505] border border-[#3a0d0d] px-3 py-1.5 w-fit">
-              {product.category.replace("_", " ")}
-            </span>
-            <h1 className="text-4xl font-semibold tracking-tight leading-tight">
-              {product.name}
-            </h1>
-            <p className="text-[#888] text-base leading-relaxed">
-              {product.description}
-            </p>
-          </div>
-
-          {/* Price */}
-          <div className="font-mono text-5xl font-bold text-[#d42b2b] leading-none">
-            ${product.price}
-            <span className="text-base text-[#555] font-normal ml-2">USD</span>
-          </div>
-
-          <div className="h-px bg-[#1a1a1a]" />
-
-          {/* Stock */}
-          <div className="bg-[#0f0f0f] border border-[#1a1a1a] p-5 flex items-center justify-between">
-            <div>
-              <span className="font-mono text-[10px] tracking-widest uppercase text-[#444] block mb-2">
-                Stock
-              </span>
-              <div className="flex items-center gap-2 text-lg text-[#c5c0b8]">
-                <span className={`w-2 h-2 rounded-full ${isLowStock ? "bg-amber-500" : "bg-emerald-500"}`} />
-                {product.stock} units
-                {isLowStock && (
-                  <span className="font-mono text-[10px] text-amber-400 border border-amber-900 bg-amber-950 px-2 py-0.5 ml-1">
-                    Low Stock
-                  </span>
-                )}
-              </div>
-            </div>
-            <button className="font-mono text-[11px] tracking-widest uppercase text-[#888] border border-[#1e1e1e] hover:border-emerald-700 hover:text-emerald-400 px-5 py-2.5 transition-all">
-              Restock
-            </button>
-          </div>
-
-          {/* Tags */}
-          {product.tags && (
-            <div className="flex flex-wrap gap-2">
-              {product.tags.map((tag) => (
-                <span key={tag} className="font-mono text-[10px] tracking-wider text-[#555] border border-[#1e1e1e] px-3 py-1.5">
-                  {tag}
-                </span>
-              ))}
-            </div>
-          )}
-
-          <div className="h-px bg-[#1a1a1a]" />
-
-          {/* Admin Actions */}
-          <div className="flex flex-col gap-3">
-            <button className="w-full bg-[#0f0f0f] border border-[#1e1e1e] hover:border-[#d42b2b] hover:text-[#d42b2b] text-[#888] font-mono text-[11px] tracking-widest uppercase py-4 transition-all">
-              Edit Product
-            </button>
-            <div className="grid grid-cols-2 gap-3">
-              <button className="bg-[#0f0f0f] border border-[#1e1e1e] hover:border-amber-600 hover:text-amber-400 text-[#888] font-mono text-[11px] tracking-widest uppercase py-4 transition-all">
-                Toggle Visibility
-              </button>
-              <button className="bg-[#0f0f0f] border border-[#1a0505] hover:bg-[#1a0505] hover:text-[#d42b2b] text-[#555] font-mono text-[11px] tracking-widest uppercase py-4 transition-all">
-                Delete
-              </button>
-            </div>
-          </div>
-
-        </div>
-      </div>
-    </div>
-  );
+    )
 }
