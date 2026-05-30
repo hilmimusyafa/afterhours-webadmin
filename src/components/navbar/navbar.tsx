@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { LogoutAction } from "@/src/actions/auth.action";
 
 const NAV = [
   { label: "DASH", href: "/" },
@@ -13,7 +14,7 @@ export default function Navbar() {
   const pathname = usePathname();
 
   const isActive = (href: string) =>
-    href === "/" ? pathname === "/" : pathname.startsWith(href);
+    href === "/" ? pathname === "/" : (pathname?.startsWith(href) ?? false);
 
   return (
     <div className="flex w-full items-center justify-between mb-6">
@@ -49,9 +50,11 @@ export default function Navbar() {
 
       <button
         type="button"
-        className="flex h-[54px] w-[54px] items-center justify-center rounded-full bg-[#d42b2b] font-['Ndot57Caps'] text-[1.25rem] font-semibold text-white"
+        onClick={() => LogoutAction()}
+        className="flex h-[54px] w-[54px] items-center justify-center rounded-full bg-[#d42b2b] font-['Ndot57Caps'] text-[1.25rem] font-semibold text-white cursor-pointer hover:bg-[#b02020] transition-colors"
+        title="Logout"
       >
-        S
+        ✕
       </button>
       </div>
     </div>

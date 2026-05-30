@@ -1,0 +1,142 @@
+@import "tailwindcss";
+
+@font-face {
+    font-family: "Ndot";
+    src: url("/fonts/Ndot55-Regular.otf") format("opentype");
+    font-weight: 400;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: "Ndot57";
+    src: url("/fonts/Ndot57-Regular.otf") format("opentype");
+    font-weight: 400;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: "Ndot57Caps";
+    src: url("/fonts/Ndot57Caps-Regular.otf") format("opentype");
+    font-weight: 400;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: "Ndot55Caps";
+    src: url("/fonts/Ndot55Caps-Regular.otf") format("opentype");
+    font-weight: 400;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: "Ndot77";
+    src: url("/fonts/Ndot77JPExtended.ttf") format("truetype");
+    font-weight: 400;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: "NType82";
+    src: url("/fonts/NType82-Regular.otf") format("opentype");
+    font-weight: 400;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: "NType82Headline";
+    src: url("/fonts/NType82-Headline.otf") format("opentype");
+    font-weight: 700;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: "NType82Mono";
+    src: url("/fonts/NType82Mono-Regular.otf") format("opentype");
+    font-weight: 400;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: "LetteraMono";
+    src: url("/fonts/LetteraMonoLL-Regular.otf") format("opentype");
+    font-weight: 400;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: "LetteraMono";
+    src: url("/fonts/LetteraMonoLL-Medium.otf") format("opentype");
+    font-weight: 500;
+    font-style: normal;   
+    font-display: swap;
+}
+
+@font-face {
+    font-family: "Inter";
+    src: url("/fonts/Inter-Regular.ttf") format("truetype");
+    font-weight: 400;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: "Inter";
+    src: url("/fonts/Inter-Medium.otf") format("opentype");
+    font-weight: 500;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: "SpaceGrotesk";
+    src: url("/fonts/SpaceGrotesk-Regular.otf") format("opentype");
+    font-weight: 400;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: "SpaceMono";
+    src: url("/fonts/SpaceMono-Regular.otf") format("opentype");
+    font-weight: 400;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: "JetBrains Mono";
+    src: url("/fonts/JetBrainsMono-Regular.ttf") format("truetype");
+    font-weight: 400;
+    font-style: normal;
+    font-display: swap;
+}
+
+:root {
+    --background: #000000;
+    --box: #1C1C1C;
+    --foreground: #ffffff;
+    --accent: #EC232B;
+}
+
+@media (prefers-color-scheme: dark) {
+    :root {
+        --background: #000000;
+        --box: #1C1C1C;
+        --foreground: #ffffff;
+        --accent: #EC232B;
+    }
+}
+body {
+    background: var(--background);
+    color: var(--foreground);
+    font-family: "Ndot55", "Ndot57", "Ndot57Caps", "Ndot55Caps", "Ndot77", "NType82", "NType82Headline", "NType82Mono", "LetteraMono", "Inter", "SpaceGrotesk", "SpaceMono", "JetBrains Mono", sans-serif;
+}
