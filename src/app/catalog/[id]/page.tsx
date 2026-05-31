@@ -70,7 +70,6 @@ export default function CatalogItemPage() {
 
     return (
         <div className="flex flex-col gap-8 w-full relative">
-            {/* Header */}
             <div className="flex flex-col gap-2 w-full text-left">
                 <h1 className="font-['Ndot57Caps'] text-[2rem] tracking-[0.1em] text-center text-[#f0ece4] uppercase">
                     CATALOG <span className="text-[#d42b2b]">ITEM</span>
@@ -81,10 +80,8 @@ export default function CatalogItemPage() {
             </div>
 
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 w-full items-stretch">
-                {/* Kontainer Foto */}
                 <div className="relative overflow-hidden rounded-sm border border-[#1a1a1a] bg-[#0f0f0f] w-full h-full min-h-[300px]">
                     {product.image_url ? (
-                        // eslint-disable-next-line @next/next/no-img-element
                         <img
                             src={product.image_url}
                             alt={product.name}
@@ -103,9 +100,7 @@ export default function CatalogItemPage() {
                     </div>
                 </div>
 
-                {/* Kotak Teks */}
                 <div className="flex flex-col gap-6 p-8 rounded-sm border border-[#1a1a1a] bg-[#0f0f0f] text-[#f0ece4] min-h-[500px] md:min-h-[600px] justify-start h-full">
-                    {/* Judul & Badge Kategori */}
                     <div className="flex flex-col gap-4">
                         <h2 className="text-3xl font-semibold tracking-wide">{product.name}</h2>
                         <div>
@@ -115,14 +110,11 @@ export default function CatalogItemPage() {
                         </div>
                     </div>
 
-                    {/* Deskripsi */}
                     <p className="text-sm md:text-md text-[#cfcfcf] font-mono leading-relaxed mt-2">
                         {product.description}
                     </p>
 
-                    {/* Area Bawah: Harga, Stok, dan Tombol */}
                     <div className="mt-auto pt-6 border-t border-[#1a1a1a] flex flex-col sm:flex-row justify-between items-start sm:items-end gap-6">
-                        {/* Grup Harga & Stok */}
                         <div className="flex gap-10">
                             <div className="flex flex-col gap-1">
                                 <p className="text-[0.65rem] tracking-[0.2em] uppercase text-[#888] font-mono">Price</p>
@@ -135,7 +127,6 @@ export default function CatalogItemPage() {
                             </div>
                         </div>
 
-                        {/* Tombol Aksi */}
                         <div className="flex gap-3 w-full sm:w-auto">
                             <button
                                 onClick={handleDelete}
