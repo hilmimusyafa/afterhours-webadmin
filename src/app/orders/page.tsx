@@ -16,7 +16,7 @@ const STATUS_COLORS: Record<string, string> = {
 function formatCurrency(amount: number): string {
 	return new Intl.NumberFormat("en-US", {
 		style: "currency",
-		currency: "USD",
+		currency: "IDR",
 		minimumFractionDigits: 0,
 	}).format(amount);
 }

@@ -35,8 +35,8 @@ export default async function Page() {
         chartData = statsRes.chart_data ?? [];
         lowStockProducts = Array.isArray(stockRes) ? stockRes : (stockRes?.data ?? []);
         recentOrders = Array.isArray(ordersRes) ? ordersRes.slice(0, 5) : (ordersRes?.data ?? []).slice(0, 5);
-    } catch {
-        console.error("Failed to fetch dashboard data");
+    } catch (error) {
+        console.error("Failed to fetch dashboard data", error);
     }
 
     return (
