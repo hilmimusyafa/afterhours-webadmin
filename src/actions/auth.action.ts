@@ -5,7 +5,7 @@ import { redirect } from "next/navigation";
 
 import { LoginResponse } from "../types/auth.type";
 
-const backend_url = process.env.BACKEND_URL || "http://localhost:8000";
+const backend_url = process.env.BACKEND_URL || "http://127.0.0.1:8000";
 
 export async function LoginAction(formData: FormData): Promise<{ error?: string }> {
     const email = formData.get("email") as string;

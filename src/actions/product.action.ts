@@ -2,6 +2,7 @@
 
 import { ProductsListResponse, ProductInfoResponse, ProductMutationResponse, ProductDeleteResponse } from "@/src/types/product.types";
 import { getAuthToken } from "@/src/utils/auth";
+import { LoadingBoundaryProvider } from "next/dist/client/components/layout-router";
 
 const backend_url = process.env.BACKEND_URL || "http://localhost:8000";
 
@@ -74,11 +75,13 @@ export async function CreateProduct(data: {
         };
         if (token) headers["Authorization"] = `Bearer ${token}`;
 
+        const bodyPayload = JSON.stringify(data);
+
         const response = await fetch(`${backend_url}/api/admin/products/`, {
             method: "POST",
             headers,
             credentials: "include",
-            body: JSON.stringify(data),
+            body: bodyPayload,
         });
 
         const result = await response.json();
