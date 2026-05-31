@@ -86,7 +86,6 @@ export default function OrderViewPage() {
 
     return (
         <div className="flex flex-col gap-8 w-full relative">
-            {/* Header */}
             <div className="flex flex-col gap-2 w-full text-left">
                 <h1 className="font-['Ndot57Caps'] text-[2rem] tracking-[0.1em] text-center text-[#f0ece4] uppercase">
                     ORDER <span className="text-[#d42b2b]">DETAILS</span>
@@ -98,7 +97,6 @@ export default function OrderViewPage() {
 
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 w-full items-stretch">
 
-                {/* Visual Left Side */}
                 <div className="relative z-0 overflow-hidden rounded-sm border border-[#1a1a1a] bg-[#0f0f0f] w-full min-h-[350px]">
                     <div className="absolute inset-0 z-0 bg-[#111]">
                         {order.shipping_lat && order.shipping_lng && (
@@ -122,7 +120,6 @@ export default function OrderViewPage() {
                     </div>
                 </div>
 
-                {/* Right Information Detail */}
                 <div className="flex flex-col gap-8 p-8 rounded-sm border border-[#1a1a1a] bg-[#0f0f0f] text-[#f0ece4] h-full">
                     
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
@@ -172,7 +169,6 @@ export default function OrderViewPage() {
                             <p className="text-2xl font-semibold text-[#f0ece4]">{formatCurrency(order.total_amount)}</p>
                         </div>
 
-                        {/* Tombol Standar */}
                         <button 
                             onClick={() => setIsModalOpen(true)}
                             className="w-full sm:w-auto px-8 py-3 bg-[#d42b2b] text-white font-mono text-sm tracking-[0.1em] uppercase rounded-sm hover:bg-[#b02020] transition-colors cursor-pointer"
@@ -183,7 +179,6 @@ export default function OrderViewPage() {
                 </div>
             </div>
 
-            {/* Modal Update Status */}
             {isModalOpen && (
                 <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 backdrop-blur-sm">
                     <div className="bg-[#0f0f0f] border border-[#1a1a1a] rounded-sm p-8 w-full max-w-md flex flex-col gap-6">

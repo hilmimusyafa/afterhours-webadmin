@@ -10,7 +10,6 @@ export default function CreateCatalogItemPage() {
     const router = useRouter();
     const [saving, setSaving] = useState(false);
 
-    // Form fields
     const [name, setName] = useState("");
     const [category, setCategory] = useState(CATEGORIES[0]);
     const [description, setDescription] = useState("");
@@ -40,7 +39,6 @@ export default function CreateCatalogItemPage() {
 
     return (
         <div className="flex flex-col gap-8 w-full relative">
-            {/* Header */}
             <div className="flex flex-col gap-2 w-full text-left">
                 <h1 className="font-['Ndot57Caps'] text-[2rem] tracking-[0.1em] text-center text-[#f0ece4] uppercase">
                     NEW <span className="text-[#d42b2b]">ITEM</span>
@@ -48,7 +46,6 @@ export default function CreateCatalogItemPage() {
             </div>
 
             <form onSubmit={handleSubmit} className="grid grid-cols-1 lg:grid-cols-2 gap-6 w-full items-stretch">
-                {/* Kontainer Foto */}
                 <div className="relative overflow-hidden rounded-sm border border-[#1a1a1a] bg-[#0f0f0f] w-full h-full min-h-[400px] group">
                     {imageUrl ? (
                         <img
@@ -65,7 +62,6 @@ export default function CreateCatalogItemPage() {
                         style={{ backgroundImage: 'radial-gradient(#d42b2b 0.5px, transparent 0.5px)', backgroundSize: '15px 15px' }}
                     />
 
-                    {/* Image URL Input Overlay */}
                     <div className="absolute inset-0 flex flex-col items-center justify-center border border-[#1a1a1a] m-4 rounded-sm bg-[#0f0f0f]/70 p-6">
                         <svg
                             className="w-12 h-12 text-[#444] mb-4"
@@ -86,9 +82,7 @@ export default function CreateCatalogItemPage() {
                     </div>
                 </div>
 
-                {/* Kotak Form Input */}
                 <div className="flex flex-col gap-6 p-8 rounded-sm border border-[#1a1a1a] bg-[#0b0b0b] text-[#f0ece4] min-h-[500px] md:min-h-[600px]">
-                    {/* Input Nama & Kategori */}
                     <div className="flex flex-col gap-6">
                         <div className="flex flex-col gap-2">
                             <label className="text-[0.65rem] tracking-[0.2em] uppercase text-[#888] font-mono">Item Name</label>
@@ -117,7 +111,6 @@ export default function CreateCatalogItemPage() {
                         </div>
                     </div>
 
-                    {/* Input Deskripsi */}
                     <div className="flex flex-col gap-2">
                         <label className="text-[0.65rem] tracking-[0.2em] uppercase text-[#888] font-mono">Description</label>
                         <textarea
@@ -130,9 +123,7 @@ export default function CreateCatalogItemPage() {
                         />
                     </div>
 
-                    {/* Area Bawah: Harga, Stok, dan Tombol Simpan */}
                     <div className="mt-auto pt-6 border-t border-[#1a1a1a] flex flex-col sm:flex-row justify-between items-start sm:items-end gap-6">
-                        {/* Input Harga & Stok */}
                         <div className="flex gap-8">
                             <div className="flex flex-col gap-2">
                                 <label className="text-[0.65rem] tracking-[0.2em] uppercase text-[#888] font-mono">Price (IDR)</label>
@@ -159,7 +150,6 @@ export default function CreateCatalogItemPage() {
                             </div>
                         </div>
 
-                        {/* Tombol Aksi */}
                         <div className="flex gap-4 w-full sm:w-auto">
                             <button
                                 type="button"

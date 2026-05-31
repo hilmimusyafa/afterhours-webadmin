@@ -47,7 +47,6 @@ export default function CatalogPage() {
 				CATALOG <span className="text-[#d42b2b]">MANAGER</span>
 			</h1>
 
-			{/* Search Bar */}
 			<div className="flex items-center justify-center w-full max-w-4xl mx-auto gap-3">
 				<div className="flex items-center max-w-md w-full bg-[#0f0f0f] border border-[#1a1a1a] px-4 py-3 gap-3 rounded-sm">
 					<span className="font-mono text-[0.8rem] text-[#d42b2b]">~</span>
@@ -68,7 +67,6 @@ export default function CatalogPage() {
 				</Link>
 			</div>
 			
-			{/* Grid */}
 			<div className="grid grid-cols-2 md:grid-cols-3 py-6 lg:grid-cols-4 gap-6 w-full">
 				{filtered.map((product) => (
 					<Link
@@ -78,7 +76,6 @@ export default function CatalogPage() {
 					>
 						<div className="w-full aspect-square bg-[#111] group-hover:bg-[#1a1a1a] transition-colors">
 							{product.image_url ? (
-								// eslint-disable-next-line @next/next/no-img-element
 								<img src={product.image_url} alt={product.name} className="w-full h-full object-cover" />
 							) : null}
 						</div>

@@ -49,7 +49,6 @@ export default function Login() {
 			</div>
 		</div>
 
-		{/* Garis Pembatas (Hanya muncul di Desktop) */}
 		<div
 			className={
 			"absolute left-[50%] top-[50%] transform -translate-x-1/2 -translate-y-1/2 w-px h-[250px] bg-gradient-to-b from-transparent via-[#333] to-transparent transition-opacity duration-500 delay-100 z-10 " +
@@ -58,7 +57,6 @@ export default function Login() {
 			}
 		/>
 
-		{/* Login form — Desktop: Muncul di Kanan (75%), Mobile: Muncul di Bawah (65%) */}
 		<form
 			action={async (formData) => {
 				setLoading(true);

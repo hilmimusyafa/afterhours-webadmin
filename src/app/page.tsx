@@ -36,12 +36,11 @@ export default async function Page() {
         lowStockProducts = Array.isArray(stockRes) ? stockRes : (stockRes?.data ?? []);
         recentOrders = Array.isArray(ordersRes) ? ordersRes.slice(0, 5) : (ordersRes?.data ?? []).slice(0, 5);
     } catch {
-        // fallback to 0
+        console.error("Failed to fetch dashboard data");
     }
 
     return (
         <div className="flex flex-col gap-6 w-full h-full min-h-[calc(100vh-6rem)]">
-            {/* Header */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
                 <div className="border border-[#1a1a1a] bg-[#0f0f0f] rounded-sm flex flex-col justify-center min-h-[250px] h-full">
                     <ChartLineDefault chartData={chartData} />
