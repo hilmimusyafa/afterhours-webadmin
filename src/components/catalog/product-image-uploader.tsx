@@ -2,6 +2,7 @@
 
 import { ChangeEvent, DragEvent, useRef, useState } from "react";
 import { ImagePlus, Loader2, Upload, X } from "lucide-react";
+import ProductImage from "@/src/components/product-image";
 import { uploadProductImage } from "@/src/utils/cloudinary-upload";
 
 type ProductImageUploaderProps = {
@@ -92,10 +93,10 @@ export function ProductImageUploader({
         ].join(" ")}
       >
         {value ? (
-          <img
+          <ProductImage
             src={value}
             alt="Product preview"
-            className="absolute inset-0 h-full w-full object-cover opacity-70 grayscale"
+            className="object-cover opacity-70 grayscale"
           />
         ) : (
           <div className="absolute inset-0 bg-[#111]" />
