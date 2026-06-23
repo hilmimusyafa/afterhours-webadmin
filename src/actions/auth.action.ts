@@ -4,12 +4,17 @@ import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 
 import { LoginResponse } from "../types/auth.type";
+import { readJsonBody } from "../utils/api";
 
 const backend_url = process.env.BACKEND_URL || "http://127.0.0.1:8000";
 
 export async function LoginAction(formData: FormData): Promise<{ error?: string }> {
-    const email = formData.get("email") as string;
-    const password = formData.get("password") as string;
+    const email = formData.get("email");
+    const password = formData.get("password");
+
+    if (typeof email !== "string" || typeof password !== "string" || !email || !password) {
+        return { error: "Email and password are required" };
+    }
 
     try {
         const response = await fetch(`${backend_url}/api/admin/auth/login/`, {
@@ -20,23 +25,32 @@ export async function LoginAction(formData: FormData): Promise<{ error?: string 
             body: JSON.stringify({ email, password }),
         });
 
-        const result: LoginResponse = await response.json();
+        const result = await readJsonBody<LoginResponse>(response);
 
         if (!response.ok) {
             return { error: "Login failed: Invalid credentials" };
+        }
+
+        if (!result) {
+            return { error: "Login failed: Invalid server response" };
         }
 
         if (result.user?.role !== "admin") {
             return { error: "Access denied: Not an admin" };
         }
 
-        const cookieStore = await cookies() as any;
+        if (!result.token) {
+            return { error: "Login failed: Missing authentication token" };
+        }
+
+        const cookieStore = await cookies();
         cookieStore.set({
             name: "token",
             value: result.token,
             httpOnly: true,
             secure: process.env.NODE_ENV === "production",
             sameSite: "strict",
+            path: "/",
             maxAge: 60 * 60 * 24, // 1 day
         });
     } catch (error) {
@@ -48,8 +62,9 @@ export async function LoginAction(formData: FormData): Promise<{ error?: string 
 }
 
 export async function LogoutAction() {
+    const cookieStore = await cookies();
+
     try {
-        const cookieStore = await cookies() as any;
         const token = cookieStore.get("token")?.value;
 
         if (token) {
@@ -61,10 +76,16 @@ export async function LogoutAction() {
                 },
             });
         }
-
-        cookieStore.delete("token");
     } catch (error) {
         console.error("Logout error:", error);
+    } finally {
+        cookieStore.set("token", "", {
+            httpOnly: true,
+            secure: process.env.NODE_ENV === "production",
+            sameSite: "strict",
+            path: "/",
+            maxAge: 0,
+        });
     }
 
     redirect("/login");

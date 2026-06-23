@@ -4,7 +4,9 @@ import React, { useState, useEffect } from "react";
 import { useParams, useRouter } from "next/navigation";
 import Link from "next/link";
 import { FetchProductInfo, DeleteProduct } from "@/src/actions/product.action";
+import ProductImage from "@/src/components/product-image";
 import { Product } from "@/src/types/product.types";
+import { getErrorMessage } from "@/src/utils/error";
 
 function formatCurrency(amount: number): string {
     return new Intl.NumberFormat("id-ID", { style: "currency", currency: "IDR", maximumFractionDigits: 0 }).format(amount);
@@ -27,8 +29,8 @@ export default function CatalogItemPage() {
             try {
                 const res = await FetchProductInfo(productId);
                 setProduct(res.data);
-            } catch (err: any) {
-                setError(err?.message || "Failed to load product");
+            } catch (error: unknown) {
+                setError(getErrorMessage(error, "Failed to load product"));
             } finally {
                 setLoading(false);
             }
@@ -40,10 +42,17 @@ export default function CatalogItemPage() {
         if (!confirm("Are you sure you want to delete this product?")) return;
         setDeleting(true);
         try {
-            await DeleteProduct(productId);
+            const result = await DeleteProduct(productId);
+
+            if (!result.success) {
+                alert(result.message);
+                return;
+            }
+
             router.push("/catalog");
-        } catch (err: any) {
-            alert(err?.message || "Failed to delete product");
+            router.refresh();
+        } catch (error: unknown) {
+            alert(getErrorMessage(error, "Failed to delete product"));
         } finally {
             setDeleting(false);
         }
@@ -82,10 +91,11 @@ export default function CatalogItemPage() {
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 w-full items-stretch">
                 <div className="relative overflow-hidden rounded-sm border border-[#1a1a1a] bg-[#0f0f0f] w-full h-full min-h-[300px]">
                     {product.image_url ? (
-                        <img
+                        <ProductImage
                             src={product.image_url}
                             alt={product.name}
-                            className="absolute inset-0 w-full h-full object-cover block opacity-90"
+                            loading="eager"
+                            className="object-cover opacity-90"
                         />
                     ) : (
                         <div className="absolute inset-0 bg-[#111]" />

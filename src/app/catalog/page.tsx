@@ -3,6 +3,7 @@
 import React, { useEffect, useState } from "react";
 import Link from "next/link";
 import { FetchProducts } from "@/src/actions/product.action";
+import ProductImage from "@/src/components/product-image";
 import { Product } from "@/src/types/product.types";
 
 function formatCurrency(amount: number): string {
@@ -20,7 +21,7 @@ export default function CatalogPage() {
 			try {
 				const res = await FetchProducts();
 				if (mounted) setData(res?.data ?? []);
-			} catch (err) {
+			} catch {
 				if (mounted) setData([]);
 			} finally {
 				if (mounted) setLoading(false);
@@ -74,9 +75,9 @@ export default function CatalogPage() {
 						href={`/catalog/${product.id}`}
 						className="bg-[#0f0f0f] border border-[#1a1a1a] rounded-sm overflow-hidden cursor-pointer transition-all duration-300 hover:border-[#d42b2b] group no-underline"
 					>
-						<div className="w-full aspect-square bg-[#111] group-hover:bg-[#1a1a1a] transition-colors">
+						<div className="relative w-full aspect-square bg-[#111] group-hover:bg-[#1a1a1a] transition-colors">
 							{product.image_url ? (
-								<img src={product.image_url} alt={product.name} className="w-full h-full object-cover" />
+								<ProductImage src={product.image_url} alt={product.name} className="object-cover" />
 							) : null}
 						</div>
 						<div className="px-4 py-3 font-mono text-[0.75rem] tracking-[0.08em] text-[#cfcfcf] border-t border-[#1a1a1a]">

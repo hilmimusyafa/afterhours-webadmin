@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { connection } from "next/server";
 import { FetchProducts, FetchStockAlerts } from "@/src/actions/product.action";
 import { FetchOrders, FetchOrderStats } from "@/src/actions/order.action";
 import { ChartLineDefault } from "@/src/components/line-chart/line-chart";
@@ -15,6 +16,10 @@ function formatDate(dateStr: string): string {
 }
 
 export default async function Page() {
+    // Dashboard data is user-specific and comes from the live backend.
+    // Avoid contacting the backend while Vercel is prerendering the build.
+    await connection();
+
     let totalProducts = 0;
     let totalOrders = 0;
     let pendingOrders = 0;

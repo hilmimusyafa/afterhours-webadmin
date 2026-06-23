@@ -40,7 +40,7 @@ export default function OrdersPage() {
 			try {
 				const res = await FetchOrders({ per_page: 50 });
 				if (mounted) setData(res?.data ?? []);
-			} catch (err) {
+			} catch {
 				if (mounted) setData([]);
 			} finally {
 				if (mounted) setLoading(false);

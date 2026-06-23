@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import { useParams, useRouter } from "next/navigation";
 import { FetchOrderInfo, UpdateOrderStatus } from "@/src/actions/order.action";
 import { Order } from "@/src/types/order.types";
+import { getErrorMessage } from "@/src/utils/error";
 import dynamic from "next/dynamic";
 
 const Map = dynamic(() => import("@/src/components/maps/maps"), { ssr: false });
@@ -42,8 +43,8 @@ export default function OrderViewPage() {
                 const res = await FetchOrderInfo(orderId);
                 setOrder(res.data);
                 setSelectedStatus(res.data.status);
-            } catch (err: any) {
-                setError(err?.message || "Failed to load order");
+            } catch (error: unknown) {
+                setError(getErrorMessage(error, "Failed to load order"));
             } finally {
                 setLoading(false);
             }
@@ -58,8 +59,8 @@ export default function OrderViewPage() {
             await UpdateOrderStatus(orderId, selectedStatus);
             setOrder({ ...order, status: selectedStatus });
             setIsModalOpen(false);
-        } catch (err: any) {
-            alert(err?.message || "Failed to update status");
+        } catch (error: unknown) {
+            alert(getErrorMessage(error, "Failed to update status"));
         } finally {
             setUpdating(false);
         }

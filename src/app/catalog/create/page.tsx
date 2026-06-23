@@ -4,6 +4,7 @@ import React, { useState } from "react";
 import { useRouter } from "next/navigation";
 import { CreateProduct } from "@/src/actions/product.action";
 import { ProductImageUploader } from "@/src/components/catalog/product-image-uploader";
+import { getErrorMessage } from "@/src/utils/error";
 
 const CATEGORIES = [
   "peripherals",
@@ -37,8 +38,8 @@ export default function CreateCatalogItemPage() {
         image_url: imageUrl || undefined,
       });
       router.push(`/catalog/${result.data.id}`);
-    } catch (err: any) {
-      alert(err?.message || "Failed to create product");
+    } catch (error: unknown) {
+      alert(getErrorMessage(error, "Failed to create product"));
     } finally {
       setSaving(false);
     }

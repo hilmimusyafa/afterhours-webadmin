@@ -5,6 +5,7 @@ import { useParams, useRouter } from "next/navigation";
 import { FetchProductInfo, UpdateProduct } from "@/src/actions/product.action";
 import { Product } from "@/src/types/product.types";
 import { ProductImageUploader } from "@/src/components/catalog/product-image-uploader";
+import { getErrorMessage } from "@/src/utils/error";
 
 const CATEGORIES = [
   "peripherals",
@@ -45,8 +46,8 @@ export default function EditCatalogItemPage() {
         setPrice(p.price);
         setStock(p.stock);
         setImageUrl(p.image_url || "");
-      } catch (err: any) {
-        setError(err?.message || "Failed to load product");
+      } catch (error: unknown) {
+        setError(getErrorMessage(error, "Failed to load product"));
       } finally {
         setLoading(false);
       }
@@ -68,8 +69,8 @@ export default function EditCatalogItemPage() {
         image_url: imageUrl || undefined,
       });
       router.push(`/catalog/${productId}`);
-    } catch (err: any) {
-      alert(err?.message || "Failed to update product");
+    } catch (error: unknown) {
+      alert(getErrorMessage(error, "Failed to update product"));
     } finally {
       setSaving(false);
     }

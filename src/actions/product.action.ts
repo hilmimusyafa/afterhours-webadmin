@@ -2,7 +2,7 @@
 
 import { ProductsListResponse, ProductInfoResponse, ProductMutationResponse, ProductDeleteResponse } from "@/src/types/product.types";
 import { getAuthToken } from "@/src/utils/auth";
-import { LoadingBoundaryProvider } from "next/dist/client/components/layout-router";
+import { getApiError, readJsonBody } from "@/src/utils/api";
 
 const backend_url = process.env.BACKEND_URL || "http://localhost:8000";
 
@@ -21,10 +21,14 @@ export async function FetchProducts(): Promise<ProductsListResponse> {
             credentials: "include",
         });
 
-        const result: ProductsListResponse = await response.json();
+        const result = await readJsonBody<ProductsListResponse>(response);
 
         if (!response.ok) {
-            console.log("Failed to fetch products:", result);
+            throw getApiError(response, result, "Failed to fetch products");
+        }
+
+        if (!result) {
+            throw new Error("Failed to fetch products: Invalid server response");
         }
 
         return result;
@@ -48,11 +52,17 @@ export async function FetchProductInfo(productId: string): Promise<ProductInfoRe
             credentials: "include",
         });
 
+        const result = await readJsonBody<ProductInfoResponse>(response);
+
         if (!response.ok) {
-            throw new Error(`Failed to fetch product info: ${response.status} ${response.statusText}`);
+            throw getApiError(response, result, "Failed to fetch product info");
+        }
+
+        if (!result) {
+            throw new Error("Failed to fetch product info: Invalid server response");
         }
         
-        return (await response.json()) as ProductInfoResponse;
+        return result;
     }
     catch (error) {
         throw error;
@@ -84,13 +94,17 @@ export async function CreateProduct(data: {
             body: bodyPayload,
         });
 
-        const result = await response.json();
+        const result = await readJsonBody<ProductMutationResponse>(response);
 
         if (!response.ok) {
-            throw new Error(result.message || "Failed to create product");
+            throw getApiError(response, result, "Failed to create product");
         }
 
-        return result as ProductMutationResponse;
+        if (!result) {
+            throw new Error("Failed to create product: Invalid server response");
+        }
+
+        return result;
     } catch (error) {
         throw error;
     }
@@ -119,13 +133,17 @@ export async function UpdateProduct(productId: string, data: {
             body: JSON.stringify(data),
         });
 
-        const result = await response.json();
+        const result = await readJsonBody<ProductMutationResponse>(response);
 
         if (!response.ok) {
-            throw new Error(result.message || "Failed to update product");
+            throw getApiError(response, result, "Failed to update product");
         }
 
-        return result as ProductMutationResponse;
+        if (!result) {
+            throw new Error("Failed to update product: Invalid server response");
+        }
+
+        return result;
     } catch (error) {
         throw error;
     }
@@ -145,15 +163,24 @@ export async function DeleteProduct(productId: string): Promise<ProductDeleteRes
             credentials: "include",
         });
 
-        const result = await response.json();
+        const result = await readJsonBody<Partial<ProductDeleteResponse>>(response);
 
         if (!response.ok) {
-            throw new Error(result.message || "Failed to delete product");
+            return {
+                success: false,
+                message: getApiError(response, result, "Failed to delete product").message,
+            };
         }
 
-        return result as ProductDeleteResponse;
+        return {
+            success: true,
+            message: result?.message || "Product deleted successfully",
+        };
     } catch (error) {
-        throw error;
+        return {
+            success: false,
+            message: error instanceof Error ? error.message : "Failed to delete product",
+        };
     }
 }
 
@@ -172,10 +199,14 @@ export async function FetchStockAlerts(): Promise<ProductsListResponse> {
             credentials: "include",
         });
 
-        const result: ProductsListResponse = await response.json();
+        const result = await readJsonBody<ProductsListResponse>(response);
         
         if (!response.ok) {
-            console.log("Failed to fetch stock alerts:", result);
+            throw getApiError(response, result, "Failed to fetch stock alerts");
+        }
+
+        if (!result) {
+            throw new Error("Failed to fetch stock alerts: Invalid server response");
         }
 
         return result;
