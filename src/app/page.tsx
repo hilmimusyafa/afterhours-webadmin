@@ -16,8 +16,6 @@ function formatDate(dateStr: string): string {
 }
 
 export default async function Page() {
-    // Dashboard data is user-specific and comes from the live backend.
-    // Avoid contacting the backend while Vercel is prerendering the build.
     await connection();
 
     let totalProducts = 0;
@@ -34,7 +32,7 @@ export default async function Page() {
             FetchOrderStats(),
             FetchStockAlerts(),
         ]);
-        totalProducts = productsRes.data?.length ?? 0;
+        totalProducts = productsRes.total ?? productsRes.data?.length ?? 0;
         totalOrders = statsRes.total_orders ?? 0;
         pendingOrders = statsRes.status_counts?.pending ?? 0;
         chartData = statsRes.chart_data ?? [];

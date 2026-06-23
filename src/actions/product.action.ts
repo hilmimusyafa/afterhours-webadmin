@@ -6,7 +6,15 @@ import { getApiError, readJsonBody } from "@/src/utils/api";
 
 const backend_url = process.env.BACKEND_URL || "http://localhost:8000";
 
-export async function FetchProducts(): Promise<ProductsListResponse> {
+type ProductsApiResponse = Partial<ProductsListResponse> & {
+    data?: ProductsListResponse["data"];
+};
+
+export async function FetchProducts(params?: {
+    page?: number;
+    per_page?: number;
+    keywords?: string;
+}): Promise<ProductsListResponse> {
     try {
         const token = await getAuthToken();
         const headers: Record<string, string> = {
@@ -15,13 +23,21 @@ export async function FetchProducts(): Promise<ProductsListResponse> {
         };
         if (token) headers["Authorization"] = `Bearer ${token}`;
 
-        const response = await fetch(`${backend_url}/api/admin/products/`, {
+        const query = new URLSearchParams();
+        if (params?.page) query.set("page", String(params.page));
+        if (params?.per_page) query.set("per_page", String(params.per_page));
+        if (params?.keywords?.trim()) query.set("keywords", params.keywords.trim());
+
+        const queryString = query.toString();
+        const url = `${backend_url}/api/admin/products${queryString ? `?${queryString}` : ""}`;
+        const response = await fetch(url, {
             method: "GET",
             headers,
             credentials: "include",
+            cache: "no-store",
         });
 
-        const result = await readJsonBody<ProductsListResponse>(response);
+        const result = await readJsonBody<ProductsApiResponse>(response);
 
         if (!response.ok) {
             throw getApiError(response, result, "Failed to fetch products");
@@ -31,7 +47,46 @@ export async function FetchProducts(): Promise<ProductsListResponse> {
             throw new Error("Failed to fetch products: Invalid server response");
         }
 
-        return result;
+        const data = Array.isArray(result.data) ? result.data : [];
+        const currentPage = Number(result.current_page) || params?.page || 1;
+        const lastPage = Number(result.last_page) || 1;
+        const perPage = Number(result.per_page) || params?.per_page || 20;
+        let total = Number(result.total);
+
+        if (!Number.isFinite(total)) {
+            if (currentPage === lastPage) {
+                total = (lastPage - 1) * perPage + data.length;
+            } else {
+                const lastPageQuery = new URLSearchParams(query);
+                lastPageQuery.set("page", String(lastPage));
+
+                const lastPageResponse = await fetch(
+                    `${backend_url}/api/admin/products?${lastPageQuery.toString()}`,
+                    {
+                        method: "GET",
+                        headers,
+                        credentials: "include",
+                        cache: "no-store",
+                    }
+                );
+                const lastPageResult = await readJsonBody<ProductsApiResponse>(lastPageResponse);
+
+                if (!lastPageResponse.ok) {
+                    throw getApiError(lastPageResponse, lastPageResult, "Failed to fetch product total");
+                }
+
+                const lastPageData = Array.isArray(lastPageResult?.data) ? lastPageResult.data : [];
+                total = (lastPage - 1) * perPage + lastPageData.length;
+            }
+        }
+
+        return {
+            data,
+            current_page: currentPage,
+            last_page: lastPage,
+            per_page: perPage,
+            total,
+        };
     } catch (error) {
         throw error;
     }

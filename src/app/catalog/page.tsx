@@ -13,34 +13,56 @@ function formatCurrency(amount: number): string {
 export default function CatalogPage() {
 	const [data, setData] = useState<Product[]>([]);
 	const [search, setSearch] = useState("");
+	const [page, setPage] = useState(1);
+	const [lastPage, setLastPage] = useState(1);
+	const [perPage, setPerPage] = useState(20);
+	const [total, setTotal] = useState(0);
 	const [loading, setLoading] = useState(true);
+	const [error, setError] = useState("");
 
 	useEffect(() => {
 		let mounted = true;
-		(async () => {
+		const timeout = setTimeout(async () => {
+			setLoading(true);
+			setError("");
 			try {
-				const res = await FetchProducts();
-				if (mounted) setData(res?.data ?? []);
-			} catch {
-				if (mounted) setData([]);
+				const res = await FetchProducts({
+					page,
+					per_page: 20,
+					keywords: search,
+				});
+				if (mounted) {
+					setData(res?.data ?? []);
+					setPage(res?.current_page ?? page);
+					setLastPage(res?.last_page ?? 1);
+					setPerPage(res?.per_page ?? 20);
+					setTotal(res?.total ?? 0);
+				}
+			} catch (fetchError) {
+				if (mounted) {
+					setData([]);
+					setLastPage(1);
+					setTotal(0);
+					setError(fetchError instanceof Error ? fetchError.message : "Failed to load catalog");
+				}
 			} finally {
 				if (mounted) setLoading(false);
 			}
-		})();
+		}, 300);
+
 		return () => {
 			mounted = false;
+			clearTimeout(timeout);
 		};
-	}, []);
+	}, [page, search]);
 
-	const filtered = (data || []).filter(
-		(p) =>
-		p.name.toLowerCase().includes(search.toLowerCase()) ||
-		p.category.toLowerCase().includes(search.toLowerCase())
-	);
+	const handleSearch = (value: string) => {
+		setSearch(value);
+		setPage(1);
+	};
 
-	if (loading) {
-		return <div className="text-center py-8 font-mono text-sm text-[#777]">Loading catalog...</div>;
-	}
+	const firstItem = total === 0 ? 0 : (page - 1) * perPage + 1;
+	const lastItem = total === 0 ? 0 : Math.min(page * perPage, total);
 
 	return (
 		<div className="flex flex-col gap-8 w-full">
@@ -56,7 +78,7 @@ export default function CatalogPage() {
 						type="text"
 						placeholder="Search catalog..."
 						value={search}
-						onChange={(e) => setSearch(e.target.value)}
+						onChange={(e) => handleSearch(e.target.value)}
 					/>
 				</div>
 
@@ -67,9 +89,21 @@ export default function CatalogPage() {
 					+ ADD PRODUCT
 				</Link>
 			</div>
-			
+
+			<div className="flex min-h-5 items-center justify-center font-mono text-[0.7rem] uppercase tracking-[0.08em] text-[#777]">
+				{loading ? (
+					<span>Loading catalog...</span>
+				) : error ? (
+					<span className="text-[#d42b2b]">{error}</span>
+				) : (
+					<span>
+						Showing {firstItem}-{lastItem} of {total} product{total === 1 ? "" : "s"}
+					</span>
+				)}
+			</div>
+
 			<div className="grid grid-cols-2 md:grid-cols-3 py-6 lg:grid-cols-4 gap-6 w-full">
-				{filtered.map((product) => (
+				{data.map((product) => (
 					<Link
 						key={product.id}
 						href={`/catalog/${product.id}`}
@@ -86,10 +120,34 @@ export default function CatalogPage() {
 						</div>
 					</Link>
 				))}
-				{filtered.length === 0 && (
+				{!loading && !error && data.length === 0 && (
 					<div className="col-span-full text-center text-sm text-[#777]">No products found</div>
 				)}
 			</div>
+
+			{!error && lastPage > 1 && (
+				<div className="flex items-center justify-center gap-4 font-mono text-xs">
+					<button
+						type="button"
+						disabled={page === 1 || loading}
+						onClick={() => setPage((current) => Math.max(1, current - 1))}
+						className="border border-[#333] px-4 py-2 text-[#cfcfcf] disabled:cursor-not-allowed disabled:opacity-40 hover:border-[#d42b2b]"
+					>
+						PREV
+					</button>
+					<span className="text-[#777]">
+						PAGE {page} OF {lastPage}
+					</span>
+					<button
+						type="button"
+						disabled={page === lastPage || loading}
+						onClick={() => setPage((current) => Math.min(lastPage, current + 1))}
+						className="border border-[#333] px-4 py-2 text-[#cfcfcf] disabled:cursor-not-allowed disabled:opacity-40 hover:border-[#d42b2b]"
+					>
+						NEXT
+					</button>
+				</div>
+			)}
 		</div>
 	);
 }
