@@ -1,6 +1,5 @@
 "use client"
 
-import { TrendingUp } from "lucide-react"
 import { CartesianGrid, Line, LineChart, XAxis, ResponsiveContainer, Tooltip } from "recharts"
 
 export function ChartLineDefault({ chartData }: { chartData: { day: string; orders: number | null }[] }) {
@@ -14,7 +13,11 @@ export function ChartLineDefault({ chartData }: { chartData: { day: string; orde
             </div>
             
             <div className="flex-1 w-full min-h-[250px]">
-                <ResponsiveContainer width="100%" height="100%">
+                <ResponsiveContainer
+                    width="100%"
+                    height="100%"
+                    initialDimension={{ width: 500, height: 250 }}
+                >
                     <LineChart
                         data={chartData}
                         margin={{ left: 0, right: 0, top: 10, bottom: 0 }}

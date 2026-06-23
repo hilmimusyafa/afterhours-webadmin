@@ -2,6 +2,7 @@
 
 import { OrdersListResponse, OrderInfoResponse, OrderUpdateStatusResponse } from "@/src/types/order.types";
 import { getAuthToken } from "@/src/utils/auth";
+import { getApiError, readJsonBody } from "@/src/utils/api";
 
 const backend_url = process.env.BACKEND_URL || "http://localhost:8000";
 
@@ -30,10 +31,14 @@ export async function FetchOrders(params?: {
             credentials: "include",
         });
 
-        const result: OrdersListResponse = await response.json();
+        const result = await readJsonBody<OrdersListResponse>(response);
 
         if (!response.ok) {
-            console.log("Failed to fetch orders:", result);
+            throw getApiError(response, result, "Failed to fetch orders");
+        }
+
+        if (!result) {
+            throw new Error("Failed to fetch orders: Invalid server response");
         }
 
         return result;
@@ -57,11 +62,17 @@ export async function FetchOrderInfo(orderId: string): Promise<OrderInfoResponse
             credentials: "include",
         });
 
+        const result = await readJsonBody<OrderInfoResponse>(response);
+
         if (!response.ok) {
-            throw new Error(`Failed to fetch order info: ${response.status} ${response.statusText}`);
+            throw getApiError(response, result, "Failed to fetch order info");
         }
 
-        return (await response.json()) as OrderInfoResponse;
+        if (!result) {
+            throw new Error("Failed to fetch order info: Invalid server response");
+        }
+
+        return result;
     } catch (error) {
         throw error;
     }
@@ -83,13 +94,17 @@ export async function UpdateOrderStatus(orderId: string, status: string): Promis
             body: JSON.stringify({ status }),
         });
 
-        const result = await response.json();
+        const result = await readJsonBody<OrderUpdateStatusResponse>(response);
 
         if (!response.ok) {
-            throw new Error(result.message || "Failed to update order status");
+            throw getApiError(response, result, "Failed to update order status");
         }
 
-        return result as OrderUpdateStatusResponse;
+        if (!result) {
+            throw new Error("Failed to update order status: Invalid server response");
+        }
+
+        return result;
     } catch (error) {
         throw error;
     }
@@ -114,16 +129,21 @@ export async function FetchOrderStats(): Promise<{
             credentials: "include",
         });
 
-        if (!response.ok) {
-            const errBody = await response.json().catch(() => null);
-            throw new Error(errBody?.message || `Failed to fetch order stats: ${response.status} ${response.statusText}`);
-        }
-
-        return (await response.json()) as {
+        const result = await readJsonBody<{
             total_orders: number;
             status_counts: Record<string, number>;
             chart_data: { day: string; orders: number | null }[];
-        };
+        }>(response);
+
+        if (!response.ok) {
+            throw getApiError(response, result, "Failed to fetch order stats");
+        }
+
+        if (!result) {
+            throw new Error("Failed to fetch order stats: Invalid server response");
+        }
+
+        return result;
     } catch (error) {
         throw error;
     }

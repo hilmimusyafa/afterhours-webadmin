@@ -24,5 +24,6 @@ export interface ProductMutationResponse {
 }
 
 export interface ProductDeleteResponse {
+    success: boolean;
     message: string;
 }
