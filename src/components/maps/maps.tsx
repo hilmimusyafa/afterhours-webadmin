@@ -18,7 +18,7 @@ export default function Map(cordinates: { lat: number; lng: number }) {
 
     return (
         <MapContainer
-            {...({ center: position, zoom: 13, style: { height: "400px", width: "100%" } } as any)}
+            {...({ center: position, zoom: 13, style: { height: "100%", minHeight: "350px", width: "100%" } } as any)}
         >
             <TileLayer
                 {...({ 
