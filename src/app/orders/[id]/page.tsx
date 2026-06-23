@@ -19,7 +19,7 @@ const STATUS_COLORS: Record<string, string> = {
 };
 
 function formatCurrency(amount: number): string {
-    return new Intl.NumberFormat("en-US", { style: "currency", currency: "USD", minimumFractionDigits: 0 }).format(amount);
+    return new Intl.NumberFormat("id-ID", { style: "currency", currency: "IDR", maximumFractionDigits: 0 }).format(amount);
 }
 
 export default function OrderViewPage() {
@@ -103,9 +103,7 @@ export default function OrderViewPage() {
                             <Map lat={order.shipping_lat} lng={order.shipping_lng} />
                         )}
                     </div>
-                    <div className="absolute inset-0 pointer-events-none opacity-20" 
-                        style={{ backgroundImage: 'radial-gradient(#d42b2b 0.5px, transparent 0.5px)', backgroundSize: '15px 15px' }} />
-                    
+
                     <div className="absolute bottom-6 left-6 flex flex-col gap-1 bg-[#0f0f0f]/90 p-4 border border-[#1a1a1a] backdrop-blur-md rounded-sm">
                         <p className="text-[0.65rem] tracking-[0.2em] uppercase text-[#888] font-mono">Destination</p>
                         {order.user && (

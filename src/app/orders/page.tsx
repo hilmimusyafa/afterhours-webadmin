@@ -14,10 +14,10 @@ const STATUS_COLORS: Record<string, string> = {
 };
 
 function formatCurrency(amount: number): string {
-	return new Intl.NumberFormat("en-US", {
+	return new Intl.NumberFormat("id-ID", {
 		style: "currency",
-		currency: "USD",
-		minimumFractionDigits: 0,
+		currency: "IDR",
+		maximumFractionDigits: 0,
 	}).format(amount);
 }
 
