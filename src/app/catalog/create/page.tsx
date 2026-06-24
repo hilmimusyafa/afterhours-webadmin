@@ -1,29 +1,47 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { CreateProduct } from "@/src/actions/product.action";
+import { FetchCategories } from "@/src/actions/category.action";
 import { ProductImageUploader } from "@/src/components/catalog/product-image-uploader";
+import { Category } from "@/src/types/category.types";
 import { getErrorMessage } from "@/src/utils/error";
-
-const CATEGORIES = [
-  "peripherals",
-  "furniture",
-  "desk_accessories",
-  "audio",
-  "eyewear",
-];
 
 export default function CreateCatalogItemPage() {
   const router = useRouter();
+  const [categories, setCategories] = useState<Category[]>([]);
+  const [loadingCategories, setLoadingCategories] = useState(true);
   const [saving, setSaving] = useState(false);
 
   const [name, setName] = useState("");
-  const [category, setCategory] = useState(CATEGORIES[0]);
+  const [categoryId, setCategoryId] = useState<number | null>(null);
   const [description, setDescription] = useState("");
   const [price, setPrice] = useState(0);
   const [stock, setStock] = useState(0);
   const [imageUrl, setImageUrl] = useState("");
+
+  useEffect(() => {
+    let mounted = true;
+
+    (async () => {
+      try {
+        const result = await FetchCategories();
+        if (mounted) {
+          setCategories(result.data);
+          setCategoryId(result.data[0]?.id ?? null);
+        }
+      } catch (error: unknown) {
+        alert(getErrorMessage(error, "Failed to load categories"));
+      } finally {
+        if (mounted) setLoadingCategories(false);
+      }
+    })();
+
+    return () => {
+      mounted = false;
+    };
+  }, []);
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
@@ -34,7 +52,7 @@ export default function CreateCatalogItemPage() {
         description,
         price,
         stock,
-        category,
+        category_id: categoryId,
         image_url: imageUrl || undefined,
       });
       router.push(`/catalog/${result.data.id}`);
@@ -82,14 +100,18 @@ export default function CreateCatalogItemPage() {
                 Category
               </label>
               <select
-                value={category}
-                onChange={(e) => setCategory(e.target.value)}
+                value={categoryId ?? ""}
+                onChange={(e) => setCategoryId(e.target.value ? Number(e.target.value) : null)}
                 required
-                className="bg-[#1a1a1a] border border-[#333] px-3 py-2 text-[#cfcfcf] text-sm font-mono outline-none focus:border-[#d42b2b] rounded-sm w-fit"
+                disabled={loadingCategories || categories.length === 0}
+                className="bg-[#1a1a1a] border border-[#333] px-3 py-2 text-[#cfcfcf] text-sm font-mono outline-none focus:border-[#d42b2b] rounded-sm w-fit max-w-full disabled:opacity-50"
               >
-                {CATEGORIES.map((c) => (
-                  <option key={c} value={c}>
-                    {c.replace("_", " ").toUpperCase()}
+                <option value="" disabled>
+                  {loadingCategories ? "LOADING..." : "SELECT CATEGORY"}
+                </option>
+                {categories.map((category) => (
+                  <option key={category.id} value={category.id}>
+                    {category.name.replace("_", " ").toUpperCase()}
                   </option>
                 ))}
               </select>
