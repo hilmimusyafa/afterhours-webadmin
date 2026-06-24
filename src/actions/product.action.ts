@@ -14,6 +14,7 @@ export async function FetchProducts(params?: {
     page?: number;
     per_page?: number;
     keywords?: string;
+    category?: string;
 }): Promise<ProductsListResponse> {
     try {
         const token = await getAuthToken();
@@ -27,6 +28,7 @@ export async function FetchProducts(params?: {
         if (params?.page) query.set("page", String(params.page));
         if (params?.per_page) query.set("per_page", String(params.per_page));
         if (params?.keywords?.trim()) query.set("keywords", params.keywords.trim());
+        if (params?.category?.trim()) query.set("category", params.category.trim());
 
         const queryString = query.toString();
         const url = `${backend_url}/api/admin/products${queryString ? `?${queryString}` : ""}`;
@@ -129,7 +131,8 @@ export async function CreateProduct(data: {
     description: string;
     price: number;
     stock: number;
-    category: string;
+    category?: string;
+    category_id?: number | null;
     image_url?: string;
 }): Promise<ProductMutationResponse> {
     try {
@@ -170,7 +173,8 @@ export async function UpdateProduct(productId: string, data: {
     description?: string;
     price?: number;
     stock?: number;
-    category?: string;
+    category?: string | null;
+    category_id?: number | null;
     image_url?: string;
 }): Promise<ProductMutationResponse> {
     try {

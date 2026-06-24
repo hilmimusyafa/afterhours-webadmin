@@ -7,6 +7,7 @@ import { LogoutAction } from "@/src/actions/auth.action";
 const NAV = [
   { label: "DASH", href: "/" },
   { label: "CTLG", href: "/catalog" },
+  { label: "CATS", href: "/categories" },
   { label: "ORDR", href: "/orders" },
 ];
 

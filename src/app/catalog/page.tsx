@@ -1,10 +1,14 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import Link from "next/link";
 import { FetchProducts } from "@/src/actions/product.action";
+import { FetchCategories } from "@/src/actions/category.action";
 import ProductImage from "@/src/components/product-image";
 import { Product } from "@/src/types/product.types";
+import { Category } from "@/src/types/category.types";
+
+type SortOption = "newest" | "name_asc" | "name_desc" | "price_asc" | "price_desc";
 
 function formatCurrency(amount: number): string {
 	return new Intl.NumberFormat("id-ID", { style: "currency", currency: "IDR", maximumFractionDigits: 0 }).format(amount);
@@ -12,13 +16,33 @@ function formatCurrency(amount: number): string {
 
 export default function CatalogPage() {
 	const [data, setData] = useState<Product[]>([]);
+	const [categories, setCategories] = useState<Category[]>([]);
 	const [search, setSearch] = useState("");
+	const [category, setCategory] = useState("");
+	const [sort, setSort] = useState<SortOption>("newest");
 	const [page, setPage] = useState(1);
 	const [lastPage, setLastPage] = useState(1);
 	const [perPage, setPerPage] = useState(20);
 	const [total, setTotal] = useState(0);
 	const [loading, setLoading] = useState(true);
 	const [error, setError] = useState("");
+
+	useEffect(() => {
+		let mounted = true;
+
+		(async () => {
+			try {
+				const result = await FetchCategories();
+				if (mounted) setCategories(result.data);
+			} catch {
+				if (mounted) setCategories([]);
+			}
+		})();
+
+		return () => {
+			mounted = false;
+		};
+	}, []);
 
 	useEffect(() => {
 		let mounted = true;
@@ -30,6 +54,7 @@ export default function CatalogPage() {
 					page,
 					per_page: 20,
 					keywords: search,
+					category,
 				});
 				if (mounted) {
 					setData(res?.data ?? []);
@@ -54,12 +79,39 @@ export default function CatalogPage() {
 			mounted = false;
 			clearTimeout(timeout);
 		};
-	}, [page, search]);
+	}, [category, page, search]);
 
 	const handleSearch = (value: string) => {
 		setSearch(value);
 		setPage(1);
 	};
+
+	const handleCategory = (value: string) => {
+		setCategory(value);
+		setPage(1);
+	};
+
+	const sortedData = useMemo(() => {
+		const products = [...data];
+
+		if (sort === "name_asc") {
+			return products.sort((a, b) => a.name.localeCompare(b.name));
+		}
+
+		if (sort === "name_desc") {
+			return products.sort((a, b) => b.name.localeCompare(a.name));
+		}
+
+		if (sort === "price_asc") {
+			return products.sort((a, b) => a.price - b.price);
+		}
+
+		if (sort === "price_desc") {
+			return products.sort((a, b) => b.price - a.price);
+		}
+
+		return products;
+	}, [data, sort]);
 
 	const firstItem = total === 0 ? 0 : (page - 1) * perPage + 1;
 	const lastItem = total === 0 ? 0 : Math.min(page * perPage, total);
@@ -70,7 +122,7 @@ export default function CatalogPage() {
 				CATALOG <span className="text-[#d42b2b]">MANAGER</span>
 			</h1>
 
-			<div className="flex items-center justify-center w-full max-w-4xl mx-auto gap-3">
+			<div className="flex flex-col lg:flex-row items-stretch lg:items-center justify-center w-full max-w-5xl mx-auto gap-3">
 				<div className="flex items-center max-w-md w-full bg-[#0f0f0f] border border-[#1a1a1a] px-4 py-3 gap-3 rounded-sm">
 					<span className="font-mono text-[0.8rem] text-[#d42b2b]">~</span>
 					<input
@@ -82,12 +134,50 @@ export default function CatalogPage() {
 					/>
 				</div>
 
+				<select
+					value={sort}
+					onChange={(e) => setSort(e.target.value as SortOption)}
+					className="bg-[#0f0f0f] border border-[#1a1a1a] px-4 py-3 text-[#cfcfcf] font-mono text-xs tracking-[0.08em] uppercase outline-none focus:border-[#d42b2b] rounded-sm"
+				>
+					<option value="newest">Newest</option>
+					<option value="name_asc">A-Z</option>
+					<option value="name_desc">Z-A</option>
+					<option value="price_asc">Price Low</option>
+					<option value="price_desc">Price High</option>
+				</select>
+
 				<Link
 					href="/catalog/create"
 					className="flex items-center px-4 py-3.5 bg-[#d42b2b] text-white font-mono text-xs tracking-[0.1em] uppercase hover:bg-[#b02020] transition-colors whitespace-nowrap rounded-sm no-underline justify-center"
 				>
 					+ ADD PRODUCT
 				</Link>
+			</div>
+
+			<div className="flex flex-wrap items-center justify-center gap-2 w-full max-w-5xl mx-auto">
+				<button
+					type="button"
+					onClick={() => handleCategory("")}
+					className={[
+						"px-3 py-2 border font-mono text-[0.65rem] tracking-[0.16em] uppercase rounded-sm transition-colors",
+						category === "" ? "border-[#d42b2b] text-[#f0ece4] bg-[#1a1a1a]" : "border-[#333] text-[#888] hover:border-[#d42b2b]",
+					].join(" ")}
+				>
+					All
+				</button>
+				{categories.map((item) => (
+					<button
+						key={item.id}
+						type="button"
+						onClick={() => handleCategory(item.name)}
+						className={[
+							"px-3 py-2 border font-mono text-[0.65rem] tracking-[0.16em] uppercase rounded-sm transition-colors",
+							category === item.name ? "border-[#d42b2b] text-[#f0ece4] bg-[#1a1a1a]" : "border-[#333] text-[#888] hover:border-[#d42b2b]",
+						].join(" ")}
+					>
+						{item.name.replaceAll("_", " ")}
+					</button>
+				))}
 			</div>
 
 			<div className="flex min-h-5 items-center justify-center font-mono text-[0.7rem] uppercase tracking-[0.08em] text-[#777]">
@@ -103,7 +193,7 @@ export default function CatalogPage() {
 			</div>
 
 			<div className="grid grid-cols-2 md:grid-cols-3 py-6 lg:grid-cols-4 gap-6 w-full">
-				{data.map((product) => (
+				{sortedData.map((product) => (
 					<Link
 						key={product.id}
 						href={`/catalog/${product.id}`}
@@ -117,10 +207,11 @@ export default function CatalogPage() {
 						<div className="px-4 py-3 font-mono text-[0.75rem] tracking-[0.08em] text-[#cfcfcf] border-t border-[#1a1a1a]">
 							<div>{product.name}</div>
 							<div className="text-[#888] text-[0.65rem] mt-1">{formatCurrency(product.price)}</div>
+							<div className="text-[#666] text-[0.6rem] mt-1 uppercase">{product.category ?? "Unassigned"}</div>
 						</div>
 					</Link>
 				))}
-				{!loading && !error && data.length === 0 && (
+				{!loading && !error && sortedData.length === 0 && (
 					<div className="col-span-full text-center text-sm text-[#777]">No products found</div>
 				)}
 			</div>

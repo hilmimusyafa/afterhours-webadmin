@@ -3,17 +3,11 @@
 import React, { useState, useEffect } from "react";
 import { useParams, useRouter } from "next/navigation";
 import { FetchProductInfo, UpdateProduct } from "@/src/actions/product.action";
+import { FetchCategories } from "@/src/actions/category.action";
 import { Product } from "@/src/types/product.types";
+import { Category } from "@/src/types/category.types";
 import { ProductImageUploader } from "@/src/components/catalog/product-image-uploader";
 import { getErrorMessage } from "@/src/utils/error";
-
-const CATEGORIES = [
-  "peripherals",
-  "furniture",
-  "desk_accessories",
-  "audio",
-  "eyewear",
-];
 
 export default function EditCatalogItemPage() {
   const params = useParams();
@@ -21,12 +15,13 @@ export default function EditCatalogItemPage() {
   const productId = params?.id as string;
 
   const [product, setProduct] = useState<Product | null>(null);
+  const [categories, setCategories] = useState<Category[]>([]);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
   const [name, setName] = useState("");
-  const [category, setCategory] = useState("");
+  const [categoryId, setCategoryId] = useState<number | null>(null);
   const [description, setDescription] = useState("");
   const [price, setPrice] = useState(0);
   const [stock, setStock] = useState(0);
@@ -37,11 +32,16 @@ export default function EditCatalogItemPage() {
       setLoading(true);
       setError(null);
       try {
-        const res = await FetchProductInfo(productId);
+        const [res, categoriesResult] = await Promise.all([
+          FetchProductInfo(productId),
+          FetchCategories(),
+        ]);
         const p = res.data;
+        const categoryFromName = categoriesResult.data.find((category) => category.name === p.category);
         setProduct(p);
+        setCategories(categoriesResult.data);
         setName(p.name);
-        setCategory(p.category);
+        setCategoryId(p.category_id ?? categoryFromName?.id ?? null);
         setDescription(p.description);
         setPrice(p.price);
         setStock(p.stock);
@@ -65,7 +65,7 @@ export default function EditCatalogItemPage() {
         description,
         price,
         stock,
-        category,
+        category_id: categoryId,
         image_url: imageUrl || undefined,
       });
       router.push(`/catalog/${productId}`);
@@ -137,13 +137,14 @@ export default function EditCatalogItemPage() {
                 Category
               </label>
               <select
-                value={category}
-                onChange={(e) => setCategory(e.target.value)}
-                className="bg-[#1a1a1a] border border-[#333] px-3 py-2 text-[#cfcfcf] text-sm font-mono outline-none focus:border-[#d42b2b] rounded-sm w-fit"
+                value={categoryId ?? ""}
+                onChange={(e) => setCategoryId(e.target.value ? Number(e.target.value) : null)}
+                className="bg-[#1a1a1a] border border-[#333] px-3 py-2 text-[#cfcfcf] text-sm font-mono outline-none focus:border-[#d42b2b] rounded-sm w-fit max-w-full"
               >
-                {CATEGORIES.map((c) => (
-                  <option key={c} value={c}>
-                    {c.replace("_", " ").toUpperCase()}
+                <option value="">UNASSIGNED</option>
+                {categories.map((category) => (
+                  <option key={category.id} value={category.id}>
+                    {category.name.replace("_", " ").toUpperCase()}
                   </option>
                 ))}
               </select>
