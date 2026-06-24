@@ -49,8 +49,7 @@ export default function CatalogItemPage() {
                 return;
             }
 
-            router.push("/catalog");
-            router.refresh();
+            router.replace("/catalog");
         } catch (error: unknown) {
             alert(getErrorMessage(error, "Failed to delete product"));
         } finally {

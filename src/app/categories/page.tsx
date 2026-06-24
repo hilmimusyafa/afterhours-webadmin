@@ -94,7 +94,12 @@ export default function CategoriesPage() {
     }
 
     async function handleDelete(category: Category) {
-        if (!confirm(`Delete category "${category.name}"? Products in this category will be unassigned.`)) {
+        if (category.is_default) {
+            alert("Default category cannot be deleted.");
+            return;
+        }
+
+        if (!confirm(`Delete category "${category.name}"? Products in this category will move to default.`)) {
             return;
         }
 
@@ -168,6 +173,7 @@ export default function CategoriesPage() {
             <div className="flex flex-col gap-3 w-full py-6">
                 {filteredCategories.map((category) => {
                     const isEditing = editingId === category.id;
+                    const isDefault = Boolean(category.is_default);
 
                     return (
                         <div
@@ -192,8 +198,15 @@ export default function CategoriesPage() {
                                         autoFocus
                                     />
                                 ) : (
-                                    <div className="font-mono text-sm tracking-[0.08em] text-[#f0ece4] uppercase">
-                                        {category.name.replaceAll("_", " ")}
+                                    <div className="flex flex-wrap items-center gap-2">
+                                        <div className="font-mono text-sm tracking-[0.08em] text-[#f0ece4] uppercase">
+                                            {category.name.replaceAll("_", " ")}
+                                        </div>
+                                        {isDefault && (
+                                            <span className="rounded-sm border border-[#333] bg-[#1a1a1a] px-2 py-1 font-mono text-[0.55rem] uppercase tracking-[0.16em] text-[#888]">
+                                                Default
+                                            </span>
+                                        )}
                                     </div>
                                 )}
                             </div>
@@ -225,7 +238,7 @@ export default function CategoriesPage() {
                                         type="button"
                                         title="Edit category"
                                         onClick={() => startEdit(category)}
-                                        disabled={saving}
+                                        disabled={saving || isDefault}
                                         className="inline-flex h-10 w-10 items-center justify-center rounded-sm border border-[#333] text-[#cfcfcf] hover:border-[#d42b2b] disabled:opacity-50 disabled:cursor-not-allowed"
                                     >
                                         <Pencil size={15} aria-hidden />
@@ -236,7 +249,7 @@ export default function CategoriesPage() {
                                     type="button"
                                     title="Delete category"
                                     onClick={() => handleDelete(category)}
-                                    disabled={saving}
+                                    disabled={saving || isDefault}
                                     className="inline-flex h-10 w-10 items-center justify-center rounded-sm border border-[#333] text-[#888] hover:border-[#d42b2b] hover:text-[#d42b2b] disabled:opacity-50 disabled:cursor-not-allowed"
                                 >
                                     <Trash2 size={15} aria-hidden />
